@@ -33,8 +33,9 @@ void print_action_content(AE_ITEM *item)
                  "print_action_content.\n");
          exit(1);
       }
-      printf(val);
    }
+
+   printf(val);
 }
 
 void show_action(AE_ITEM *item, int indent)
