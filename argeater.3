@@ -1,0 +1,61 @@
+.mso gproto.tmac
+.TH argeater 1 2024-1-03
+.SH NAME
+.B argeater
+\- library for parsing and documenting command line arguments
+.SH SYNOPSIS
+.nr isolate 1
+.cdef_start "typedef struct" arg_clone {} ;
+.cdef_arg "const\ char\ *" val
+.cdef_arg "struct\ arg_clone\ *" next
+.cdef_end
+
+.nr isolate 1
+.cdef_start "typedef\ enum" arg_clone {} ,
+.cdef_arg "ATYPE_FLAG\ =" 1
+.cdef_arg "ATYPE_OPTION\ =" 2
+.cdef_arg "ATYPE_REPEAT\ =" 4 end
+.cdef_end AE_TYPE
+
+.nr isolate 1
+.cdef_start "typedef\ struct" action_item {} ;
+.cdef_arg char chr
+.cdef_arg "const\ char\ *" name
+.cdef_arg AE_TYPE type
+.cdef_arg "const\ char\ **" var
+.cdef_arg "const\ char\ *" help_value
+.cdef_arg "const\ char\ *" help_desc
+.cdef_end AE_ITEM
+
+.nr isolate 1
+.cdef_start "typedef\ struct" action_map {} ;
+.cdef_arg "AE_ITEM\ *" items
+.cdef_arg int count
+.cdef_end AE_MAP
+
+.cdef_start void argeater_clone_args
+.cdef_arg "ACLONE\ *" clones
+.cdef_arg int argc
+.cdef_arg "const\ char\ **" argv end
+.cdef_end
+
+.cdef_start int argeater_process
+.cdef_arg "ACLONE\ *" clones
+.cdef_arg "AE_MAP\ *" map
+.cdef_arg "void\ *" data end
+.cdef_end
+
+.cdef_start void argeater_show_usage
+.cdef_arg "AE_MAP\ *" map
+.cdef_arg "const\ char\ *" cmd_name end
+.cdef_end
+
+.cdef_start void argeater_show_options
+.cdef_arg "AE_MAP\ *" map
+.cdef_arg int indent last
+.cdef_end
+
+.cdef_start void argeater_show_arguments
+.cdef_arg "AE_MAP\ *" map
+.cdef_arg int indent last
+.cdef_end
