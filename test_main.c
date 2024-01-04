@@ -21,7 +21,7 @@ AE_ITEM ma_items[] = {
    { 'f', "filename", ATYPE_VALUE_OPTION,  &filename,  NULL, "file to read" },
    { 'm', "margins",  ATYPE_VALUE_OPTION,  &margins,
      "top,right,bottom,left", "content margins" },
-   { 0,   "name",     0,                   &username,  "USER_NAME" },
+   { 0,   "name",     0,                   &username,  NULL, "User name" },
    { 0,   "state",    0,                   &userstate, "USER_STATE" }
 };
 
