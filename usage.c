@@ -98,6 +98,8 @@ void argeater_show_usage(AE_MAP *map, const char *cmd_name)
                printf(" ");
                print_action_content(ptr);
             }
+            else
+               printf(" UNNAMED");
          }
          ++ptr;
       }
@@ -134,12 +136,50 @@ void argeater_show_arguments(AE_MAP *map, int indent)
       if (AE_IS_POSITION(ptr))
       {
          printf("%*s", indent, "");
-         print_action_content(ptr);
+         if (ptr->name || ptr->help_value)
+            print_action_content(ptr);
+         else
+            printf("UNNAMED");
+         
          printf("\n");
          if (ptr->help_desc)
             printf("%*s   %s\n", indent, "",  ptr->help_desc);
       }
 
       ++ptr;
+   }
+}
+
+#define UNNAMED "UNNAMED"
+
+void argeater_dump_actions(AE_MAP *map)
+{
+   AE_ITEM *end = map->items + map->count;
+   int max_name_len = 0;
+
+   // For formatting, get largest name length
+   for (AE_ITEM *ptr = map->items; ptr < end; ++ptr)
+   {
+      int cur_name_len = 0;
+      if (ptr->name)
+         cur_name_len = strlen(ptr->name);
+      else
+         cur_name_len = strlen(UNNAMED);
+
+      if (cur_name_len > max_name_len)
+         max_name_len = cur_name_len;
+   }
+
+   for (AE_ITEM *ptr = map->items; ptr < end; ++ptr)
+   {
+      const char *str = *ptr->var;
+      if (str == NULL)
+         str = "NULL";
+
+      const char *name = ptr->name;
+      if (name == NULL)
+         name = UNNAMED;
+
+      printf("%-*s: '%s'\n", max_name_len, name, str);
    }
 }
