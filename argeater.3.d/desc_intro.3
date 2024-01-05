@@ -1,0 +1,27 @@
+.so fork.tmac
+.SS INTRODUCTION
+.PP
+The library works by associating string variables
+.RB ( "const char*" )
+to allowed command line arguments.
+After being set up, running
+.B argeater_process
+will set the associated string pointers to the values submitted
+as arguments on the command line.
+Thereafter, the program can consult the associated strings to
+interpret the users' intentions.
+.PP
+An array of properly-constructed
+.B AE_ITEM
+items can also be used to build a usage display using functions
+.BR argeater_show_usage ", " argeater_show_options ", and " argeater_show_arguments .
+.TP
+.B Incomplete Preliminary Specs
+Usage details of this library are evolving during the development
+stage.
+With practice using the library, some design elements may change in
+the interest of utility or clarity.
+Thus, this section gives only a basic summary of use.
+Please consult the file
+.B test_main.c
+for the latest in usage details.

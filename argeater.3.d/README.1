@@ -1,0 +1,36 @@
+.TH README 1
+.SH Disclaimer
+I am going to try using groff source for the README file, as it's
+more convenient to access in the console than a markdown file.xs
+.SH Coding Strategy
+.PP
+This directory contains sections and subsections of the main page
+that is found in the parent directory.
+.PP
+In order that each subsection can be viewed in isolation for easier
+development, each groff source file starts with the statement:
+.IP
+.EX
+\&.so fork.tmac
+.EE
+.PP
+.B fork.tmac
+contains some page setup code that includes
+.BR .so " and " .mso
+include statements and a
+.B .TH
+line that causes the page to be interpreted as a man page.
+.PP
+The setup code is protected by an
+.B .if
+statement so it only runs when it can't find the register
+.IR In_Main_Source ,
+which should only be set in the parent groff source file.
+.PP
+By using the extension
+.BR .tmac ,
+the contents of the file will not be included in the output generated
+by the
+.B soelim
+command I use when compiling the man page for installation in the
+general man page directories.

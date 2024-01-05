@@ -1,0 +1,78 @@
+.de p_argeater_process
+.   cdef_start int argeater_process
+.   cdef_arg "ACLONE\ *" clones
+.   cdef_arg "AE_MAP\ *" map last
+.   cdef_end
+..
+.\"
+.de p_argeater_clone_args
+.   cdef_start void argeater_clone_args
+.   cdef_arg "ACLONE\ *" clones
+.   cdef_arg int argc
+.   cdef_arg "const\ char\ **" argv last
+.   cdef_end
+..
+.\"
+.de p_argeater_show_usage
+.   cdef_start void argeater_show_usage
+.   cdef_arg "AE_MAP\ *" map
+.   cdef_arg "const\ char\ *" cmd_name last
+.   cdef_end
+..
+.\"
+.de p_argeater_show_options
+.   cdef_start void argeater_show_options
+.   cdef_arg "AE_MAP\ *" map
+.   cdef_arg int indent last
+.   cdef_end
+..
+.\"
+.de p_argeater_show_arguments
+.   cdef_start void argeater_show_arguments
+.   cdef_arg "AE_MAP\ *" map
+.   cdef_arg int indent last
+.   cdef_end
+..
+.\"
+.de p_argeater_dump_actions
+.   cdef_start void argeater_dump_actions
+.   cdef_arg "AE_MAP *" map last
+.   cdef_end
+..
+.\"
+.de p_AI_ITEM
+.   nr isolate 1
+.   cdef_start "typedef\ struct" action_item {} ;
+.   cdef_arg "const\ char\ **" var
+.   cdef_arg "const\ char\ *" name
+.   cdef_arg char chr
+.   cdef_arg AE_TYPE type
+.   cdef_arg "const\ char\ *" help_value
+.   cdef_arg "const\ char\ *" help_desc
+.   cdef_end AE_ITEM
+..
+.\"
+.de p_AE_TYPE
+.   nr isolate 1
+.   cdef_start "typedef\ enum" action_type {} ,
+.   cdef_arg "AET_FLAG\ =" 1
+.   cdef_arg "AET_OPTION\ =" 2
+.   cdef_arg "AET_REPEAT\ =" 4 end
+.   cdef_end AE_TYPE
+..
+.\"
+.de p_AE_MAP
+.   nr isolate 1
+.   cdef_start "typedef\ struct" action_map {} ;
+.   cdef_arg "AE_ITEM\ *" items
+.   cdef_arg int count
+.   cdef_end AE_MAP
+..
+.\"
+.de p_ACLONE
+.   nr isolate 1
+.   cdef_start "typedef struct" arg_clone {} ;
+.   cdef_arg "const\ char\ *" val
+.   cdef_arg "struct\ arg_clone\ *" next
+.   cdef_end ACLONE
+..

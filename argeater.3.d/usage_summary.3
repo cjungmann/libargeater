@@ -1,0 +1,80 @@
+.so fork.tmac
+.SS USAGE SUMMARY
+.de TEX
+.   in 4
+.   EX
+..
+.de TEE
+.   EE
+.   in
+..
+.PP
+These are the steps to follow in using the
+.B argeater
+library:
+.TS
+tab(|);
+l lx.
+1.|T{
+Include the header file to enable compiling:
+.TEX
+\(shinclude <argeater.h>
+.TEE
+T}
+|\_
+2.|T{
+Declare appropriate string variables and refer them when
+making a table of
+.B AE_ITEM
+elements:
+.sp
+.TEX
+const char *filename = NULL;
+const char *verbose_flag = NULL;
+
+AE_ITEM actions[] = {
+  { &filename,     \(dqfilename\(dq, 0,   AET_ARGUMENT },
+  { &verbose_flag, \(dqverbose\(dq,  \(aqv\(aq, AET_FLAG_OPTION }
+};
+.TEE
+.sp
+Consult the
+.B AE_ITEM
+section below for a more complete explanation.
+T}
+|\_
+3.|T{
+Package into a
+.B AE_MAP
+object:
+.sp
+.TEX
+AE_MAP action_map = SET_MAP(actions);
+.TEE
+T}
+|\_
+4.|T{
+In
+.BR main ,
+copy the arguments into a
+.B ACLONE
+list, then process the arguments:
+.sp
+.TEX
+int main(int argc, const char *argv)
+{
+   ACLONE *clones = (ACLONE*)alloca(argc * sizeof(ACLONE));
+   argeater_clone_args(clones, argc, argv);
+
+   argeater_process(clones, &action_map);
+}
+.TEE
+T}
+|\_
+5.|T{
+After running
+.BR argeater_process ,
+consult the variables associated with each action to see
+what the user requests.
+T}
+.TE
