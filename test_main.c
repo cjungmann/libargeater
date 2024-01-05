@@ -12,20 +12,28 @@ const char *margins = NULL;
 const char *username = NULL;
 const char *userstate = NULL;
 
+const char *simple = NULL;
+const char *simple_named = NULL;
+const char *simple_flag = NULL;
+const char *simple_option = NULL;
+
 AE_ITEM ma_items[] = {
-   { 'h', "help",     ATYPE_FLAG_OPTION,   &show_help, NULL, "This screen" },
-   { 'i', "index",    ATYPE_FLAG_OPTION,   &indexed,   NULL, "show line indexes" },
-   { '1', "flag1",    ATYPE_FLAG_OPTION,   &flag1,     NULL, "set first flag" },
-   { '2', "flag2",    ATYPE_FLAG_OPTION,   &flag2,     NULL, "set second flag" },
-   { '3', "flag3",    ATYPE_FLAG_OPTION,   &flag3,     NULL, "set third flag" },
-   { 'f', "filename", ATYPE_VALUE_OPTION,  &filename,  NULL, "file to read" },
-   { 'm', "margins",  ATYPE_VALUE_OPTION,  &margins,
-     "top,right,bottom,left", "content margins" },
-   { 0,   "name",     0,                   &username,  NULL, "User name" },
-   { 0,   "state",    0,                   &userstate, "USER_STATE" }
+   { &show_help, "help",     'h', AET_FLAG_OPTION,   NULL, "This screen" },
+   { &simple },
+   { &simple_named, "simple" },
+   { &simple_flag, "simple_flag", 's', AET_FLAG_OPTION },
+   { &simple_option, "simple_option", 'o', AET_VALUE_OPTION },
+   { &indexed,   "index",    'i', AET_FLAG_OPTION,   NULL, "show line indexes" },
+   { &flag1,     "flag1",    '1', AET_FLAG_OPTION,   NULL, "set first flag" },
+   { &flag2,     "flag2",    '2', AET_FLAG_OPTION,   NULL, "set second flag" },
+   { &flag3,     "flag3",    '3', AET_FLAG_OPTION,   NULL, "set third flag" },
+   { &filename,  "filename", 'f', AET_VALUE_OPTION,  NULL, "file to read" },
+   { &margins,   "margins",  'm', AET_VALUE_OPTION,  "top,right,bottom,left", "content margins" },
+   { &username,  "name" },
+   { &userstate, "state",    0,   0,                   NULL, "State in which user resides" }
 };
 
-AE_MAP arg_map = { ma_items, sizeof(ma_items) / sizeof(ma_items[0]) };
+AE_MAP arg_map = SET_MAP(ma_items);
 
 int main(int argc, const char **argv)
 {
@@ -44,15 +52,7 @@ int main(int argc, const char **argv)
       argeater_show_arguments(&arg_map, 3);
    }
    else
-   {
-      printf("indexed: '%s'\n", indexed);
-      printf("flag1: '%s'\n", flag1);
-      printf("flag2: '%s'\n", flag2);
-      printf("flag3: '%s'\n", flag3);
-      printf("filename: '%s'\n", filename);
-      printf("name: '%s'\n", username);
-      printf("state: '%s'\n", userstate);
-   }
+      argeater_dump_actions(&arg_map);
 
    return 0;
 }
