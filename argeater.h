@@ -10,26 +10,27 @@ struct arg_clone {
 };
 
 typedef enum action_type {
-   ATYPE_OPTION = 1,
-   ATYPE_VALUE = 2,
-   ATYPE_REPEAT = 4
+   AET_OPTION = 1,
+   AET_VALUE = 2,
+   AET_REPEAT = 4
 } AE_TYPE;
 
-#define ATYPE_FLAG_OPTION (ATYPE_OPTION)
-#define ATYPE_VALUE_OPTION (ATYPE_OPTION | ATYPE_VALUE)
+#define AET_ARGUMENT     (0)
+#define AET_FLAG_OPTION  (AET_OPTION)
+#define AET_VALUE_OPTION (AET_OPTION | AET_VALUE)
 
-#define AE_IS_OPTION(x)       ( (x)->type & ATYPE_OPTION )
-#define AE_IS_POSITION(x)     ( ((x)->type & ATYPE_OPTION) == 0 )
-#define AE_IS_REPEAT(x)       ( (x)->type & ATYPE_REPEAT )
-#define AE_IS_FLAG_OPTION(x)  ( ((x)->type & ATYPE_OPTION) && !((x)->type & ATYPE_VALUE) )
-#define AE_IS_VALUE_OPTION(x) ( ((x)->type & ATYPE_OPTION) && (x)->type & ATYPE_VALUE )
+#define AE_IS_OPTION(x)       ( (x)->type & AET_OPTION )
+#define AE_IS_POSITION(x)     ( ((x)->type & AET_OPTION) == 0 )
+#define AE_IS_REPEAT(x)       ( (x)->type & AET_REPEAT )
+#define AE_IS_FLAG_OPTION(x)  ( ((x)->type & AET_OPTION) && !((x)->type & AET_VALUE) )
+#define AE_IS_VALUE_OPTION(x) ( ((x)->type & AET_OPTION) && (x)->type & AET_VALUE )
 
 typedef struct action_item AE_ITEM;
 struct action_item {
-   char        chr;         ///< for character following a '-'
-   const char  *name;       ///< for name following a "--"
-   AE_TYPE     type;        ///< interpretation flags
    const char  **var;       ///< variable to set with argument's value
+   const char  *name;       ///< for name following a "--"
+   char        chr;         ///< for character following a '-'
+   AE_TYPE     type;        ///< interpretation flags
    const char  *help_value; ///< string to use in help screen
    const char  *help_desc;  ///< description of action for help screen
 };
@@ -39,6 +40,8 @@ struct action_map {
    AE_ITEM *items;
    int count;
 };
+
+#define SET_MAP(x) { (x), sizeof((x)) / sizeof((x)[0]) }
 
 /**
  * @defgroup InternalFunctions Internal Funtions
@@ -59,6 +62,8 @@ int argeater_process(ACLONE *clones, AE_MAP *map, void *data);
 void argeater_show_usage(AE_MAP *map, const char *cmd_name);
 void argeater_show_options(AE_MAP *map, int indent);
 void argeater_show_arguments(AE_MAP *map, int indent);
+
+void argeater_dump_actions(AE_MAP *map);
 
 
 #endif
