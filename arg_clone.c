@@ -1,8 +1,9 @@
 #include <string.h>
 #include <assert.h>
 #include "argeater.h"
+#include "export.h"
 
-void argeater_clone_args(ACLONE *clones, int argc, const char **argv)
+EXPORT void argeater_clone_args(ACLONE *clones, int argc, const char **argv)
 {
    ACLONE *lptr = clones;
    ACLONE *lend = lptr + argc;

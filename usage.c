@@ -5,6 +5,7 @@
 #include <alloca.h>
 
 #include "argeater.h"
+#include "export.h"
 
 /**
  * @brief Print AE_ITEM::help_value or uppercased AE_ITEM::name.
@@ -58,7 +59,7 @@ void show_action(AE_ITEM *item, int indent)
    printf("\n");
 }
 
-void argeater_show_usage(AE_MAP *map, const char *cmd_name)
+EXPORT void argeater_show_usage(AE_MAP *map, const char *cmd_name)
 {
    printf("USAGE: %s", cmd_name);
 
@@ -108,7 +109,7 @@ void argeater_show_usage(AE_MAP *map, const char *cmd_name)
    printf("\n");
 }
 
-void argeater_show_options(AE_MAP *map, int indent)
+EXPORT void argeater_show_options(AE_MAP *map, int indent)
 {
    AE_ITEM *ptr = map->items;
    AE_ITEM *end = ptr + map->count;
@@ -126,7 +127,7 @@ void argeater_show_options(AE_MAP *map, int indent)
    }
 }
 
-void argeater_show_arguments(AE_MAP *map, int indent)
+EXPORT void argeater_show_arguments(AE_MAP *map, int indent)
 {
    AE_ITEM *ptr = map->items;
    AE_ITEM *end = ptr + map->count;
@@ -140,7 +141,7 @@ void argeater_show_arguments(AE_MAP *map, int indent)
             print_action_content(ptr);
          else
             printf("UNNAMED");
-         
+
          printf("\n");
          if (ptr->help_desc)
             printf("%*s   %s\n", indent, "",  ptr->help_desc);
@@ -152,7 +153,7 @@ void argeater_show_arguments(AE_MAP *map, int indent)
 
 #define UNNAMED "UNNAMED"
 
-void argeater_dump_actions(AE_MAP *map)
+EXPORT void argeater_dump_actions(AE_MAP *map)
 {
    AE_ITEM *end = map->items + map->count;
    int max_name_len = 0;

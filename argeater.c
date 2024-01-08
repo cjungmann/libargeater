@@ -6,6 +6,7 @@
 #include <assert.h>
 
 #include "argeater.h"
+#include "export.h"
 
 /**
  * @brief Compare member @ref chr to match a AE_MAP.
@@ -199,7 +200,7 @@ bool argeater_item_from_name(AE_ITEM **item,
    exit(1);
 }
 
-int argeater_process(ACLONE *args, AE_MAP *map, void *data)
+EXPORT int argeater_process(ACLONE *args, AE_MAP *map)
 {
    bool reading_options = true;
    AE_ITEM *last_position_item = NULL;;
@@ -265,9 +266,9 @@ int argeater_process(ACLONE *args, AE_MAP *map, void *data)
                   }
                   else
                   {
-                     aptr = aptr->next;
                      cptr = cptr->next;
                      set_item_value_or_die(item, cptr->val);
+                     aptr->next = cptr;
                   }
                }
                else if (AE_IS_FLAG_OPTION(item))
