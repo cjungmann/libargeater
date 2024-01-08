@@ -6,8 +6,20 @@ library.  It omits only
 .B argeater_dump_args
 which is used for debugging.
 .PP
+.PP
+Compile the following source code with:
+.in 12
 .EX
+cc -o example test_example.c libargeater.a
+.EE
+.in
+.sp
+.EX
+// file: test_example.c
+
 \(shinclude <argeater.h>
+\(shinclude <alloca.h>
+\(shinclude <stddef.h>
 
 \fB// declare variables for the action map:\fP
 const char *help_flag = NULL;
@@ -24,7 +36,7 @@ AE_ITEM actions[] = {
 };
 
 \fB// Use macro to intializa a AE_MAP instance:\fP
-AE_MAP action_map = SET_MAP(actions);
+AE_MAP action_map = INIT_MAP(actions);
 
 \fB// Use library functions to build a usage display:\fP
 void show_help(AE_MAP *map, const char *cmdname)
@@ -34,10 +46,10 @@ void show_help(AE_MAP *map, const char *cmdname)
    argeater_show_arguments(map, 3);
 }
 
-int main(int argc, const char *argv)
+int main(int argc, const char **argv)
 {
    \fB// Collect arguments into a linked list:\fP
-   ACLONE *clones = (ACLONE*)alloca(argc * sizeof(ACLONE));o
+   ACLONE *clones = (ACLONE*)alloca(argc * sizeof(ACLONE));
    argeater_clone_args(clones, argc, argv);
 
    \fB// \(dqeat\(dq the arguments to set variables:\fP
