@@ -1,0 +1,56 @@
+.so fork.tmac
+.SH EXAMPLE
+.PP
+The following example uses nearly every resource in the
+library.  It omits only
+.B argeater_dump_args
+which is used for debugging.
+.PP
+.EX
+\(shinclude <argeater.h>
+
+\fB// declare variables for the action map:\fP
+const char *help_flag = NULL;
+const char *filename = NULL;
+const char *verbose_flag = NULL;
+const char *favcolor = NULL;
+
+\fB// attach variables to actions:\fP
+AE_ITEM actions[] = {
+  { &help_flag,    \(dqhelp\(dq,     \(aqh\(aq,  AET_FLAG_OPTION },
+  { &filename,     \(dqfilename\(dq, \(aq\(rs0\(aq, AET_ARGUMENT },
+  { &verbose_flag, \(dqverbose\(dq,  \(aqv\(aq,  AET_FLAG_OPTION },
+  { &favcolor,     \(dqfavcolor\(dq, \(aqc\(aq,  AET_VALUE_OPTION }
+};
+
+\fB// Use macro to intializa a AE_MAP instance:\fP
+AE_MAP action_map = SET_MAP(actions);
+
+\fB// Use library functions to build a usage display:\fP
+void show_help(AE_MAP *map, const char *cmdname)
+{
+   argeater_show_usage(map, cmdname);
+   argeater_show_options(map, 3);
+   argeater_show_arguments(map, 3);
+}
+
+int main(int argc, const char *argv)
+{
+   \fB// Collect arguments into a linked list:\fP
+   ACLONE *clones = (ACLONE*)alloca(argc * sizeof(ACLONE));o
+   argeater_clone_args(clones, argc, argv);
+
+   \fB// \(dqeat\(dq the arguments to set variables:\fP
+   argeater_process(clones, &action_map);
+
+   \fB// Read mapped variables and respond according to plan\fP
+   if (help_flag)
+   {
+      \fB// (First CL argument is command name:)\fP
+      show_help(&action_map, *argv);
+      return 1;
+   }
+   // else
+   //   return run_program_reading_global_vars();
+}
+.EE
