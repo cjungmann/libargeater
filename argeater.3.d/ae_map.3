@@ -1,0 +1,22 @@
+.so fork.tmac
+.SS AE_MAP (struct action_map)
+.PP
+This is a container that associates the number of array items with
+the array of
+.B AE_ITEM
+elements.
+This allows other functions that use the array to safely access
+the elements without overrunning the memory.
+.PP
+There is a macro,
+.BR INIT_MAP ,
+that can be used to set the member of the
+.B AE_MAP
+item.
+.PP
+.p_AE_MAP
+.TP
+.BI "AE_ITEM * " items
+should be a pointer to an array of
+.B AE_ITEM.
+

@@ -31,8 +31,8 @@ struct action_item {
    const char  *name;       ///< for name following a "--"
    char        chr;         ///< for character following a '-'
    AE_TYPE     type;        ///< interpretation flags
-   const char  *help_value; ///< string to use in help screen
    const char  *help_desc;  ///< description of action for help screen
+   const char  *help_value; ///< string to use to represent a sample value
 };
 
 typedef struct action_map  AE_MAP;
@@ -41,7 +41,7 @@ struct action_map {
    int count;
 };
 
-#define SET_MAP(x) { (x), sizeof((x)) / sizeof((x)[0]) }
+#define INIT_MAP(x) { (x), sizeof((x)) / sizeof((x)[0]) }
 
 /**
  * @defgroup InternalFunctions Internal Funtions
@@ -58,7 +58,7 @@ AE_ITEM *argeater_search_name(AE_MAP *map, const char *name);
 
 void argeater_clone_args(ACLONE *clones, int argc, const char **argv);
 
-int argeater_process(ACLONE *clones, AE_MAP *map, void *data);
+int argeater_process(ACLONE *clones, AE_MAP *map);
 void argeater_show_usage(AE_MAP *map, const char *cmd_name);
 void argeater_show_options(AE_MAP *map, int indent);
 void argeater_show_arguments(AE_MAP *map, int indent);

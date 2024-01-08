@@ -1,0 +1,33 @@
+.so fork.tmac
+.SS ACLONE (struct arg_clone)
+.PP
+.PP
+This linked list element points to the command line arguments that
+are passed to the program in function
+.BR main.
+.PP
+As a linked list, the elements can be easily removed as they are
+consumed, so unhandled arguments can be flagged or dealt with
+when
+.B argeater_process
+is finished parsing the arguments.
+.PP
+This linked list is created with the function
+.BR argeater_clone_args .
+The first argument in
+.B main
+is the name of the running command, and we'll use this
+non-argument argument as handle to the first remaining
+argument as arguments are removed during parsing.
+.PP
+.p_ACLONE
+.TP
+.BI "const char * " val
+This is a pointer to one of the elements of the
+.I argv
+argument of
+.BR main.
+.TP
+.BI "struct arg_clone * " next
+is a pointer to the next argument in the clone list.
+
