@@ -2,35 +2,34 @@
 .SH Disclaimer
 I am going to try using groff source for the README file, as it's
 more convenient to access in the console than a markdown file.xs
-.SH Coding Strategy
+.SH OVERVIEW
 .PP
-This directory contains sections and subsections of the main page
-that is found in the parent directory.
-.PP
-In order that each subsection can be viewed in isolation for easier
-development, each groff source file starts with the statement:
+This subdirectory full of man page fragments is a development
+convenience: each logical topic can have its own file through which
+development can take place.  Each fragment can be viewed individually
+either in
+.B emacs
+or using
 .IP
 .EX
-\&.so fork.tmac
+man -l synopsis.3
 .EE
+.SS fork.tmac
 .PP
-.B fork.tmac
-contains some page setup code that includes
-.BR .so " and " .mso
-include statements and a
+This is an includable file that, in one line, can ensure that other
+includes are handled and that there is a
 .B .TH
-line that causes the page to be interpreted as a man page.
+statement to activate man-page processing.
 .PP
-The setup code is protected by an
-.B .if
-statement so it only runs when it can't find the register
-.IR In_Main_Source ,
-which should only be set in the parent groff source file.
-.PP
-By using the extension
-.BR .tmac ,
-the contents of the file will not be included in the output generated
-by the
+There is an empty (save for a comment) shadow
+.B fork.tmac
+in the project root directory that will enable
 .B soelim
-command I use when compiling the man page for installation in the
-general man page directories.
+to successfully compile all the source pages.
+.PP
+.B NOTE:
+this macro file is using the extension
+.B tmac
+so the contents of the source file will not be included in the
+compiled version to be installed at
+.BR "/usr/share/man/man3" .
