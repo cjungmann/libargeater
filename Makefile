@@ -24,6 +24,8 @@ LFLAGS += --shared
 
 # Build module list (info make -> "Functions" -> "File Name Functions")
 MODULES = $(addsuffix .o,$(filter-out ./test_%,$(basename $(wildcard $(SRC)/*.c))))
+TEST_TARGETS = $(subst test_,,$(filter ./test_%,$(basename $(wildcard $(SRC)/*.c))))
+TEST_SOURCES = $(addsuffix .c,$(filter ./test_%,$(basename $(wildcard $(SRC)/*.c))))
 TEST_MODULES = $(addsuffix .o,$(filter ./test_%,$(basename $(wildcard $(SRC)/*.c))))
 
 # Libraries need header files.  Set the following accordingly:
@@ -39,7 +41,8 @@ preview:
 	@echo "shared library:" ${TARGET_SHARED}
 	@echo "static library:" ${TARGET_STATIC}
 	@echo "modules:       " ${MODULES}
-	@echo "test modules:  " $(TEST_MODULES)
+	@echo "test sources:  " $(TEST_SOURCES)
+	@echo "test targets:  " $(TEST_TARGETS)
 
 ${TARGET_SHARED}: ${MODULES} ${HEADERS}
 	${CC} ${CFLAGS} --shared -o $@ ${MODULES}
@@ -50,8 +53,11 @@ ${TARGET_STATIC}: ${MODULES} ${HEADERS}
 %o : %c ${HEADERS}
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-test: $(TEST_MODULES) $(TARGET_STATIC) ${HEADERS}
-	$(CC) $(LDFLAGS) -o $(TARGET_TEST) $(TEST_MODULES) $(TARGET_STATIC)
+test: $(TEST_TARGETS)
+	@echo "They're done, sir"
+
+$(TEST_TARGETS) : $(TEST_SOURCES)
+	$(CC) $(CFLAGS) -o $@ test_$@.c $(TARGET_STATIC)
 
 For shared library targets:
 install:
@@ -74,12 +80,13 @@ clean:
 	rm -f $(TARGET_STATIC)
 	rm -f $(TARGET_TEST)
 	rm -f $(MODULES)
-	rm -f $(TEST_MODULES)
+	rm -f $(TEST_TARGETS)
 
 help:
 	@echo "Makefile options:"
 	@echo
 	@echo "  test       to build test program using library"
+	@echo "  preview    to see relevent files"
 	@echo "  install    to install project"
 	@echo "  uninstall  to uninstall project"
 	@echo "  clean      to remove generated files"
