@@ -49,8 +49,7 @@ void show_help(AE_MAP *map, const char *cmdname)
 int main(int argc, const char **argv)
 {
    \fB// Collect arguments into a linked list:\fP
-   ACLONE *clones = (ACLONE*)alloca(argc * sizeof(ACLONE));
-   argeater_clone_args(clones, argc, argv);
+   ACLONE *clones = CLONE_ARGS(argc, argv);
 
    \fB// \(dqeat\(dq the arguments to set variables:\fP
    argeater_process(clones, &action_map);
