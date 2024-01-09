@@ -3,7 +3,7 @@
 #include "argeater.h"
 #include "export.h"
 
-EXPORT void argeater_clone_args(ACLONE *clones, int argc, const char **argv)
+EXPORT ACLONE *argeater_clone_args(ACLONE *clones, int argc, const char **argv)
 {
    ACLONE *lptr = clones;
    ACLONE *lend = lptr + argc;
@@ -25,4 +25,6 @@ EXPORT void argeater_clone_args(ACLONE *clones, int argc, const char **argv)
       ++lptr;
       ++sptr;
    }
+
+   return clones;
 }

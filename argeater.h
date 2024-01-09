@@ -1,6 +1,8 @@
 #ifndef ARGEATER_H
 #define ARGEATER_H
 
+#include <alloca.h>
+
 // This struct is used to make a copy of the arguments
 // from which consumed arguments can be discarded.
 typedef struct arg_clone ACLONE;
@@ -41,8 +43,6 @@ struct action_map {
    int count;
 };
 
-#define INIT_MAP(x) { (x), sizeof((x)) / sizeof((x)[0]) }
-
 /**
  * @defgroup InternalFunctions Internal Funtions
  * @{
@@ -56,7 +56,7 @@ AE_ITEM *argeater_search_name(AE_MAP *map, const char *name);
 
 
 
-void argeater_clone_args(ACLONE *clones, int argc, const char **argv);
+ACLONE *argeater_clone_args(ACLONE *clones, int argc, const char **argv);
 
 int argeater_process(ACLONE *clones, AE_MAP *map);
 void argeater_show_usage(AE_MAP *map, const char *cmd_name);
@@ -64,6 +64,14 @@ void argeater_show_options(AE_MAP *map, int indent);
 void argeater_show_arguments(AE_MAP *map, int indent);
 
 void argeater_dump_actions(AE_MAP *map);
+
+
+#define INIT_MAP(X) { (X), sizeof((X)) / sizeof((X)[0]) }
+#define CLONE_ARGS(ARGC,ARGV)\
+   (argeater_clone_args(\
+      alloca((ARGC)*sizeof(ACLONE)),\
+      (ARGC),\
+      (ARGV)))
 
 
 #endif
