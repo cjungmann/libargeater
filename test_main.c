@@ -35,24 +35,28 @@ AE_ITEM ma_items[] = {
 
 AE_MAP arg_map = INIT_MAP(ma_items);
 
+void display_help(AE_MAP *map, const char *cmd)
+{
+   argeater_show_usage(map, cmd);
+   printf("Options:\n");
+   argeater_show_options(map, 3);
+   printf("Arguments:\n");
+   argeater_show_arguments(map, 3);
+}
+
 int main(int argc, const char **argv)
 {
-   // argeater(argc, argv, &arg_map, &arg_map, NULL);
-
-   ACLONE *clones = (ACLONE*)alloca(sizeof(ACLONE)*argc);
-   argeater_clone_args(clones, argc, argv);
-
-   argeater_process(clones, &arg_map);
-   if (show_help)
-   {
-      argeater_show_usage(&arg_map, *argv);
-      printf("Options:\n");
-      argeater_show_options(&arg_map, 3);
-      printf("Arguments:\n");
-      argeater_show_arguments(&arg_map, 3);
-   }
+   if (argc == 1)
+      display_help(&arg_map, *argv);
    else
-      argeater_dump_actions(&arg_map);
+   {
+      ACLONE *clones = CLONE_ARGS(argc, argv);
 
+      argeater_process(clones, &arg_map);
+      if (show_help)
+         display_help(&arg_map, *argv);
+      else
+         argeater_dump_actions(&arg_map);
+   }
    return 0;
 }
