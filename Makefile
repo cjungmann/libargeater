@@ -53,8 +53,9 @@ ${TARGET_STATIC}: ${MODULES} ${HEADERS}
 %o : %c ${HEADERS}
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-test: $(TEST_TARGETS)
-	@echo "They're done, sir"
+test:
+	rm $(TEST_TARGETS)
+	$(MAKE) $(TEST_TARGETS)
 
 $(TEST_TARGETS) : $(TEST_SOURCES)
 	$(CC) $(CFLAGS) -o $@ test_$@.c $(TARGET_STATIC)
