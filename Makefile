@@ -54,7 +54,7 @@ ${TARGET_STATIC}: ${MODULES} ${HEADERS}
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 test:
-	rm $(TEST_TARGETS)
+	rm -f $(TEST_TARGETS)
 	$(MAKE) $(TEST_TARGETS)
 
 $(TEST_TARGETS) : $(TEST_SOURCES)
