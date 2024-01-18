@@ -3,6 +3,9 @@
  * This file contains code that was copied directly from the
  * examples section of the man page, with some modification
  * to integrate code from the *action_setter* example.
+ *
+ * *action_setter* code fragments can be identified by a
+ * leading comment mentioning the example.
  */
 
 
