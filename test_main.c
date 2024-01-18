@@ -52,11 +52,19 @@ int main(int argc, const char **argv)
    {
       ACLONE *clones = CLONE_ARGS(argc, argv);
 
-      argeater_process(clones, &arg_map);
-      if (show_help)
-         display_help(&arg_map, *argv);
+      if (argeater_process(clones, &arg_map))
+      {
+         if (show_help)
+            display_help(&arg_map, *argv);
+         else
+            argeater_dump_actions(&arg_map);
+      }
       else
-         argeater_dump_actions(&arg_map);
+      {
+         fprintf(stderr, "Argument parsing error.\n");
+         return 1;
+      }
    }
+
    return 0;
 }
