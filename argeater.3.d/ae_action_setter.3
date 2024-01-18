@@ -1,0 +1,25 @@
+.so fork.tmac
+.SS ACTION_SETTER FUNCTION POINTER TYPE
+.PP
+The
+.I setter
+struct member is a function pointer that is used to save the
+argument value of the identified action type.
+.IP
+.p_action_setter
+.PP
+If
+.I setter
+is NULL,
+.B argeater
+will use the default
+.I setter
+function
+.BR argeater_string_setter .
+.PP
+Of course, strings can be converted to a desired data type when
+it is about to be used, but using a
+.B action_setter
+function can not only save the argument value in its native form but
+also validate the argument value before continuing.
+
