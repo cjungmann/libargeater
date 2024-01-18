@@ -173,7 +173,12 @@ EXPORT void argeater_dump_actions(AE_MAP *map)
 
    for (AE_ITEM *ptr = map->items; ptr < end; ++ptr)
    {
-      const char *str = *ptr->var;
+      const char *str = NULL;
+      if (ptr->setter == argeater_string_setter)
+         str = *ptr->var;
+      else
+         str = "N/A for custom setter";
+
       if (str == NULL)
          str = "NULL";
 
