@@ -32,7 +32,7 @@ typedef bool (*action_setter)(const char **target, const char *value);
 
 typedef struct action_item AE_ITEM;
 struct action_item {
-   const char    **var;       ///< variable to set with argument's value
+   const char    **target;    ///< variable to set with argument's value
    const char    *name;       ///< for name following a "--"
    char          chr;         ///< for character following a '-'
    AE_TYPE       type;        ///< interpretation flags

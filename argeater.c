@@ -58,12 +58,12 @@ int set_item_value_or_die(AE_ITEM *item, const char *value)
       return 1;
    }
 
-   return (*item->setter)(item->var, value);
+   return (*item->setter)(item->target, value);
 }
 
 int set_item_flag(AE_ITEM *item)
 {
-   return (*item->setter)(item->var, "on");
+   return (*item->setter)(item->target, "on");
 }
 
 
@@ -260,7 +260,7 @@ EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
       }
       // Assign to next position arg
       else if (find_next_position_item(&last_position_item, map))
-         *(last_position_item->var) = str;
+         *(last_position_item->target) = str;
 
       if (arg_name)
       {
