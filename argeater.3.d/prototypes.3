@@ -42,7 +42,7 @@
 .\"
 .de p_AI_ITEM
 .   cdef_start "typedef\ struct" action_item {} ;
-.   cdef_arg "const\ char\ **" var
+.   cdef_arg "const\ char\ **" target
 .   cdef_arg "const\ char\ *" name
 .   cdef_arg char chr
 .   cdef_arg AE_TYPE type
@@ -69,16 +69,18 @@
 .\"
 .de p_ACLONE
 .   cdef_start "typedef struct" arg_clone {} ;
-.   cdef_arg "const\ char\ *" val
+.   cdef_arg "const\ char\ *" value
 .   cdef_arg "struct\ arg_clone\ *" next
 .   cdef_end_stacked ACLONE
 ..
+.\"
 .de p_action_setter
 .   cdef_start "typedef\ bool" (*action_setter)
 .   cdef_arg "const\ char\ **" target
 .   cdef_arg "const\ char\ *" value last
 .   cdef_end
 ..
+.\"
 .de p_argeater_string_setter
 .   cdef_start bool argeater_string_setter
 .   cdef_arg "const\ char\ **" target
