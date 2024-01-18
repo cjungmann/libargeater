@@ -175,7 +175,7 @@ EXPORT void argeater_dump_actions(AE_MAP *map)
    {
       const char *str = NULL;
       if (ptr->setter == argeater_string_setter)
-         str = *ptr->var;
+         str = *ptr->target;
       else
          str = "N/A for custom setter";
 
