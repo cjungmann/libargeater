@@ -46,7 +46,7 @@ AE_ITEM *argeater_search_name(AE_MAP *map, const char *name)
    return NULL;
 }
 
-void set_item_value_or_die(AE_ITEM *item, const char *value)
+int set_item_value_or_die(AE_ITEM *item, const char *value)
 {
    if (value == NULL || *value == '\0')
    {
@@ -55,14 +55,15 @@ void set_item_value_or_die(AE_ITEM *item, const char *value)
       else if (item->name)
          fprintf(stderr, "Option '-%s' needs a value.\n", item->name);
 
-      exit(1);
+      return 1;
    }
-   *(item->var) = value;
+
+   return (*item->setter)(item->var, value);
 }
 
-void set_item_flag(AE_ITEM *item)
+int set_item_flag(AE_ITEM *item)
 {
-   *(item->var) = "on";
+   return (*item->setter)(item->var, "on");
 }
 
 
@@ -200,13 +201,35 @@ bool argeater_item_from_name(AE_ITEM **item,
    exit(1);
 }
 
-EXPORT int argeater_process(ACLONE *args, AE_MAP *map)
+bool argeater_string_setter(const char **target, const char *value)
 {
+   *target = value;
+   return true;
+}
+
+void argeater_set_missing_actions(AE_MAP *map)
+{
+   AE_ITEM *ptr = map->items;
+   AE_ITEM *end = ptr + map->count;
+   while (ptr < end)
+   {
+      if (ptr->setter == NULL)
+         ptr->setter = argeater_string_setter;
+
+      ++ptr;
+   }
+}
+
+EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
+{
+   bool success = true;
    bool reading_options = true;
-   AE_ITEM *last_position_item = NULL;;
+   AE_ITEM *last_position_item = NULL;
+
+   argeater_set_missing_actions(map);
 
    ACLONE *aptr = args;
-   while (aptr->next)
+   while (aptr->next && success)
    {
       ACLONE *cptr = aptr->next;
       const char *str = cptr->val;
@@ -245,9 +268,9 @@ EXPORT int argeater_process(ACLONE *args, AE_MAP *map)
          if (argeater_item_from_name(&item, &value, map, arg_name))
          {
             if (AE_IS_VALUE_OPTION(item))
-               set_item_value_or_die(item, value);
+               success = set_item_value_or_die(item, value);
             else
-               set_item_flag(item);
+               success = set_item_flag(item);
          }
       }
       else if (arg_char)
@@ -261,18 +284,18 @@ EXPORT int argeater_process(ACLONE *args, AE_MAP *map)
                {
                   if (*(arg_char+1))
                   {
-                     set_item_value_or_die(item, (++arg_char));
+                     success = set_item_value_or_die(item, (++arg_char));
                      break;
                   }
                   else
                   {
                      cptr = cptr->next;
-                     set_item_value_or_die(item, cptr->val);
+                     success = set_item_value_or_die(item, cptr->val);
                      aptr->next = cptr;
                   }
                }
                else if (AE_IS_FLAG_OPTION(item))
-                  set_item_flag(item);
+                  success = set_item_flag(item);
             }
             else
             {
@@ -287,7 +310,7 @@ EXPORT int argeater_process(ACLONE *args, AE_MAP *map)
       aptr = aptr->next;
    }
 
-   return 0;
+   return success;
 }
 
 
