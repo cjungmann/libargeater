@@ -20,6 +20,7 @@ cc -o example test_example.c libargeater.a
 \(shinclude <argeater.h>
 \(shinclude <alloca.h>
 \(shinclude <stddef.h>
+\(shinclude <stdio.h>
 
 \fB// declare variables for the action map:\fP
 const char *help_flag = NULL;
@@ -48,6 +49,12 @@ void show_help(AE_MAP *map, const char *cmdname)
 
 int main(int argc, const char **argv)
 {
+   if (argc < 2)
+   {
+      show_help(&action_map, *argv);
+      return 1;
+   }
+
    \fB// Collect arguments into a linked list:\fP
    ACLONE *clones = CLONE_ARGS(argc, argv);
 
@@ -61,8 +68,8 @@ int main(int argc, const char **argv)
          show_help(&action_map, *argv);
          return 1;
       }
-      // else
-      //   return run_program_reading_global_vars();
+      else
+        argeater_dump_actions(&action_map);
    }
    else
       fprintf(stderr, \(dqError processing arguments.\(rsn\(dq);
@@ -72,20 +79,50 @@ int main(int argc, const char **argv)
 .EE
 .SS ACTION_SETTER EXAMPLE
 .PP
-This topic is a little too complicated to include in the general
-example.
-It will set an integer value, validating the data-type and range
-of the value before saving it to the target.
+This example illustrates how a custom data type might be handled.
+.TS
+tab(|);
+l lx.
+1|T{
+Declare a
+.B status variable
+in which the value will be stored.
+T}
+2|T{
+A
+.B handler function
+must match the signature of the
+.B action_setter
+function pointer.
+Cast the
+.I target
+argument to the appropriate data type and set it according to
+.IR value .
+T}
+3|T{
+Make an
+.B AE_ITEM element
+that refers to the handle function.
+Make sure the
+.I help_desc
+member of
+.B AE_ITEM
+explains how the data is used.
+T}
+.TE
 .PP
 .EX
-// The target variable (not a string):
+// For strtol function in set_debug_level:
+\(shinclude <stdlib.h>
+
+// Declare the \fBstatus variable\fP
 int debug_level = 0;
 
-// The custom setter function:
-void set_debug_level(const char **target, const char *arg)
+// Implement the \fBhandler function\fP.
+bool set_debug_level(const char **target, const char *arg)
 {
    char *end;
-   int val = (int)strtol(&arg, &end, 10);
+   int val = (int)strtol(arg, &end, 10);
    if (end == arg)
       fprintf(stderr, \(dq\(aq%s\(aq is not a number.\(rsn\(dq, arg);
    else if (val<0 || val>3)
@@ -93,30 +130,21 @@ void set_debug_level(const char **target, const char *arg)
    else
    {
       *(int*)target = val;
-      return;
+      return true;
    }
 
-   exit(1);
+   return false;
 }
 
-// Actions array with AE_ITEM invoking the custom setter function:
+// Create an \fBAE_ITEM element\fP referencing the \fBhandler function\fP.
 AE_ITEM actions[] = {
   { (const char**)&debug_level,
    \(dqdeblev\(dq,
    \(aqd\(aq,
    AET_VALUE_OPTION,
-   \(dqSet the debug level\(dq,
+   \(dqThe debug level can be 0, 1, 2, or 3\(dq,
    \(dqdebug level\(dq,
    set_debug_level }
 };
 
-AE_MAP action_map = INIT_MAP(actions);
 .EE
-.PP
-With these things set up, running
-.B argeater_process
-will use the custom
-.B action_setter
-function to process a
-.I debug level
-option.
