@@ -122,14 +122,14 @@ int debug_level = 0;
 bool set_debug_level(const char **target, const char *arg)
 {
    char *end;
-   int val = (int)strtol(arg, &end, 10);
+   int level = (int)strtol(arg, &end, 10);
    if (end == arg)
       fprintf(stderr, \(dq\(aq%s\(aq is not a number.\(rsn\(dq, arg);
-   else if (val<0 || val>3)
-      fprintf(stderr, \(dq\(aq%d\(aq is not a valid debug level.\(rsn\(dq, val);
+   else if (level<0 || level>3)
+      fprintf(stderr, \(dq\(aq%d\(aq is not a valid debug level.\(rsn\(dq, level);
    else
    {
-      *(int*)target = val;
+      *(int*)target = level;
       return true;
    }
 
