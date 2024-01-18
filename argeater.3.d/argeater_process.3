@@ -7,5 +7,21 @@ and a map of actions
 .RI ( map )
 with which to match them, to easily access the users' command line
 arguments.
-
+.IP
 .p_argeater_process
+.PP
+Make
+.I clones
+with the
+.B CLONE_ARGS
+macro and the
+.I map
+with the
+.B INIT_MAP
+macro.
+.PP
+The function returns
+.B true if successful but terminates immediately and returns
+.B false
+for any error processing arguments.
+

@@ -1,5 +1,5 @@
 .de p_argeater_process
-.   cdef_start int argeater_process
+.   cdef_start bool argeater_process
 .   cdef_arg "ACLONE\ *" clones
 .   cdef_arg "AE_MAP\ *" map last
 .   cdef_end
@@ -16,14 +16,14 @@
 .de p_argeater_show_usage
 .   cdef_start void argeater_show_usage
 .   cdef_arg "AE_MAP\ *" map
-.   cdef_arg "const\ char\ *" cmd_name last
+.   cdef_arg "const\ char\ *" cmd_name end
 .   cdef_end
 ..
 .\"
 .de p_argeater_show_options
 .   cdef_start void argeater_show_options
 .   cdef_arg "AE_MAP\ *" map
-.   cdef_arg int indent last
+.   cdef_arg int indent end
 .   cdef_end
 ..
 .\"
@@ -41,7 +41,6 @@
 ..
 .\"
 .de p_AI_ITEM
-.   nr isolate 1
 .   cdef_start "typedef\ struct" action_item {} ;
 .   cdef_arg "const\ char\ **" var
 .   cdef_arg "const\ char\ *" name
@@ -49,30 +48,40 @@
 .   cdef_arg AE_TYPE type
 .   cdef_arg "const\ char\ *" help_desc
 .   cdef_arg "const\ char\ *" help_value
-.   cdef_end AE_ITEM
+.   cdef_arg action_setter setter
+.   cdef_end_stacked AE_ITEM
 ..
 .\"
 .de p_AE_TYPE
-.   nr isolate 1
 .   cdef_start "typedef\ enum" action_type {} ,
 .   cdef_arg "AET_FLAG\ =" 1
 .   cdef_arg "AET_OPTION\ =" 2
 .   cdef_arg "AET_REPEAT\ =" 4 end
-.   cdef_end AE_TYPE
+.   cdef_end_stacked AE_TYPE
 ..
 .\"
 .de p_AE_MAP
-.   nr isolate 1
 .   cdef_start "typedef\ struct" action_map {} ;
 .   cdef_arg "AE_ITEM\ *" items
 .   cdef_arg int count
-.   cdef_end AE_MAP
+.   cdef_end_stacked AE_MAP
 ..
 .\"
 .de p_ACLONE
-.   nr isolate 1
 .   cdef_start "typedef struct" arg_clone {} ;
 .   cdef_arg "const\ char\ *" val
 .   cdef_arg "struct\ arg_clone\ *" next
-.   cdef_end ACLONE
+.   cdef_end_stacked ACLONE
+..
+.de p_action_setter
+.   cdef_start "typedef\ bool" (*action_setter)
+.   cdef_arg "const\ char\ **" target
+.   cdef_arg "const\ char\ *" value last
+.   cdef_end
+..
+.de p_argeater_string_setter
+.   cdef_start bool argeater_string_setter
+.   cdef_arg "const\ char\ **" target
+.   cdef_arg "const\ char\ *" value last
+.   cdef_end
 ..

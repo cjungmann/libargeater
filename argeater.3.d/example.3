@@ -52,16 +52,71 @@ int main(int argc, const char **argv)
    ACLONE *clones = CLONE_ARGS(argc, argv);
 
    \fB// \(dqeat\(dq the arguments to set variables:\fP
-   argeater_process(clones, &action_map);
-
-   \fB// Read mapped variables and respond according to plan\fP
-   if (help_flag)
+   if (argeater_process(clones, &action_map))
    {
-      \fB// (First CL argument is command name:)\fP
-      show_help(&action_map, *argv);
-      return 1;
+      \fB// Read mapped variables and respond according to plan\fP
+      if (help_flag)
+      {
+         \fB// (First CL argument is command name:)\fP
+         show_help(&action_map, *argv);
+         return 1;
+      }
+      // else
+      //   return run_program_reading_global_vars();
    }
-   // else
-   //   return run_program_reading_global_vars();
+   else
+      fprintf(stderr, \(dqError processing arguments.\(rsn\(dq);
+
+   return 0;
 }
 .EE
+.SS ACTION_SETTER EXAMPLE
+.PP
+This topic is a little too complicated to include in the general
+example.
+It will set an integer value, validating the data-type and range
+of the value before saving it to the target.
+.PP
+.EX
+// The target variable (not a string):
+int debug_level = 0;
+
+// The custom setter function:
+void set_debug_level(const char **target, const char *arg)
+{
+   char *end;
+   int val = (int)strtol(&arg, &end, 10);
+   if (end == arg)
+      fprintf(stderr, \(dq\(aq%s\(aq is not a number.\(rsn\(dq, arg);
+   else if (val<0 || val>3)
+      fprintf(stderr, \(dq\(aq%d\(aq is not a valid debug level.\(rsn\(dq, val);
+   else
+   {
+      *(int*)target = val;
+      return;
+   }
+
+   exit(1);
+}
+
+// Actions array with AE_ITEM invoking the custom setter function:
+AE_ITEM actions[] = {
+  { (const char**)&debug_level,
+   \(dqdeblev\(dq,
+   \(aqd\(aq,
+   AET_VALUE_OPTION,
+   \(dqSet the debug level\(dq,
+   \(dqdebug level\(dq,
+   set_debug_level }
+};
+
+AE_MAP action_map = INIT_MAP(actions);
+.EE
+.PP
+With these things set up, running
+.B argeater_process
+will use the custom
+.B action_setter
+function to process a
+.I debug level
+option.
