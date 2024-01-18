@@ -28,14 +28,14 @@ int debug_level = 0;
 bool set_debug_level(const char **target, const char *arg)
 {
    char *end;
-   int val = (int)strtol(arg, &end, 10);
+   int level = (int)strtol(arg, &end, 10);
    if (end == arg)
       fprintf(stderr, "'%s' is not a number.\n", arg);
-   else if (val<0 || val>3)
-      fprintf(stderr, "'%d' is not a valid debug level.\n", val);
+   else if (level<0 || level>3)
+      fprintf(stderr, "'%d' is not a valid debug level.\n", level);
    else
    {
-      *(int*)target = val;
+      *(int*)target = level;
       return true;
    }
 
