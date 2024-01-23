@@ -1,25 +1,10 @@
 .so fork.tmac
 .SS ACLONE (struct arg_clone)
 .PP
-.PP
 This linked list element points to the command line arguments that
 are passed to the program in function
 .BR main.
 .PP
-As a linked list, the elements can be easily removed as they are
-consumed, so unhandled arguments can be flagged or dealt with
-when
-.B argeater_process
-is finished parsing the arguments.
-.PP
-This linked list is created with the function
-.BR argeater_clone_args .
-The first argument in
-.B main
-is the name of the running command, and we'll use this
-non-argument argument as handle to the first remaining
-argument as arguments are removed during parsing.
-.IP
 .p_ACLONE
 .TP
 .BI "const char * " value
@@ -30,4 +15,19 @@ argument of
 .TP
 .BI "struct arg_clone * " next
 is a pointer to the next argument in the clone list.
+.PP
+As a linked list, the elements can be easily removed as they are
+consumed, so unhandled arguments can be flagged or dealt with
+when
+.B argeater_process
+is finished parsing the arguments.
+A handle-only
+.B ACLONE
+item should preceed the first command argument as a pointer to access
+the first of the remaining command arguments.
+.PP
+There are two library functions that help build the
+.B ACLONE
+list:
+.BR argeater_clone_args " and " argeater_clone_word_list .
 

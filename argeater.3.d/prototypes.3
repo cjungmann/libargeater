@@ -1,7 +1,7 @@
 .de p_argeater_process
 .   cdef_start bool argeater_process
 .   cdef_arg "ACLONE\ *" clones
-.   cdef_arg "AE_MAP\ *" map last
+.   cdef_arg "AE_MAP\ *" map
 .   cdef_end
 ..
 .\"
@@ -9,34 +9,41 @@
 .   cdef_start "ACLONE\ *" argeater_clone_args
 .   cdef_arg "ACLONE\ *" clones
 .   cdef_arg int argc
-.   cdef_arg "const\ char\ **" argv last
+.   cdef_arg "const\ char\ **" argv
+.   cdef_end
+..
+.de p_argeater_clone_word_list
+.   cdef_start "ACLONE\ *" argeater_clone_word_list
+.   cdef_arg "ACLONE\ *" clones
+.   cdef_arg int clone_count
+.   cdef_arg "WORD_LIST\ *" wlist
 .   cdef_end
 ..
 .\"
 .de p_argeater_show_usage
 .   cdef_start void argeater_show_usage
 .   cdef_arg "AE_MAP\ *" map
-.   cdef_arg "const\ char\ *" cmd_name end
+.   cdef_arg "const\ char\ *" cmd_name
 .   cdef_end
 ..
 .\"
 .de p_argeater_show_options
 .   cdef_start void argeater_show_options
 .   cdef_arg "AE_MAP\ *" map
-.   cdef_arg int indent end
+.   cdef_arg int indent
 .   cdef_end
 ..
 .\"
 .de p_argeater_show_arguments
 .   cdef_start void argeater_show_arguments
 .   cdef_arg "AE_MAP\ *" map
-.   cdef_arg int indent last
+.   cdef_arg int indent
 .   cdef_end
 ..
 .\"
 .de p_argeater_dump_actions
 .   cdef_start void argeater_dump_actions
-.   cdef_arg "AE_MAP *" map last
+.   cdef_arg "AE_MAP *" map
 .   cdef_end
 ..
 .\"
@@ -56,7 +63,7 @@
 .   cdef_start "typedef\ enum" action_type {} ,
 .   cdef_arg "AET_FLAG\ =" 1
 .   cdef_arg "AET_OPTION\ =" 2
-.   cdef_arg "AET_REPEAT\ =" 4 end
+.   cdef_arg "AET_REPEAT\ =" 4
 .   cdef_end_stacked AE_TYPE
 ..
 .\"
@@ -77,13 +84,13 @@
 .de p_action_setter
 .   cdef_start "typedef\ bool" (*action_setter)
 .   cdef_arg "const\ char\ **" target
-.   cdef_arg "const\ char\ *" value last
+.   cdef_arg "const\ char\ *" value
 .   cdef_end
 ..
 .\"
 .de p_argeater_string_setter
 .   cdef_start bool argeater_string_setter
 .   cdef_arg "const\ char\ **" target
-.   cdef_arg "const\ char\ *" value last
+.   cdef_arg "const\ char\ *" value
 .   cdef_end
 ..

@@ -1,0 +1,104 @@
+.so fork.tmac
+.SS MAKING ACLONE LISTS
+.PP
+Make the needed
+.B ACLONE
+list from the standard arguments of function
+.BR main .
+.PP
+In both of these functions, the calling function should allocate
+an array of
+.B ACLONE
+elements.
+During initialization, the elements of the array will also be
+connected as a linked list from which elements can be discarded as
+they are consumed, and the memory of the discarded elements will be
+reclaimed when the array freed or gone out of scope (when using
+.B alloca
+for the array).
+.\"
+.PP
+.B Make ACLONE Array from Main Args
+.RS 4
+.PP
+.p_argeater_clone_args
+.TP
+.I clones
+An uninitialized array of
+.B ACLONE
+elements to be initialized
+.TP
+.I argc
+the number of elements in the
+.I clones
+array.
+It should correspond to the first argument of
+.BR main .
+.TP
+.I argv
+the second argument of
+.BR main .
+.PP
+.B EXAMPLE:
+.EX
+int main(int argc, const char **argv)
+{
+   ACLONE *clones = (ACLONES*)alloca(argc * sizeof(ACLONE);
+   ACLONE *ptr = argeater_clone_args(clones, argc, argv);
+
+   if (argeater_process(clones, map))
+      do_your_program();
+
+   return 0;
+}
+.EE
+.RE
+.\"
+.PP
+.B Make ACLONE Array from WORD_LIST
+.RS 4
+.PP
+This library was created while developing a Bash builtin function,
+whose arguments come in the form of a
+.B WORD_LIST
+linked list.
+.PP
+.p_argeater_clone_word_list
+.TP
+.I clones
+an uninitialized array of
+.B ACLONE
+elements to be initialized.
+.TP
+.I clone_count
+the number of elements in the
+.I clones
+array.
+This value must be counter from the
+.BR WORD_LIST .
+.TP
+.I wlist
+should be the word list passed to the builtin function.
+.PP
+.B EXAMPLE
+.EX
+static int cmd_builtin(WORD_LIST *list)
+{
+   int elcount = 0;
+   WORD_LIST *ptr = list;
+   while (ptr)
+   {
+      ++elcount;
+      ptr = ptr->next;
+   }
+
+   ACLONE *clones = (ACLONES*)alloca(elcount * sizeof(ACLONE));
+   ACLONE *ptr = argeater_clone_word_list(clones, elcount, list);
+
+   if (argeater_process(clones, map))
+      do_your_program();
+
+   return 0;
+}
+.EE
+.RE
