@@ -12,6 +12,11 @@ struct arg_clone {
    ACLONE *next;
 };
 
+// Fake this to compile before bash development library installed:
+#ifndef word_list
+typedef struct word_list WORD_LIST;
+#endif
+
 typedef enum action_type {
    AET_OPTION = 1,
    AET_VALUE = 2,
@@ -58,9 +63,8 @@ AE_ITEM *argeater_search_char(AE_MAP *map, char chr);
 AE_ITEM *argeater_search_name(AE_MAP *map, const char *name);
 /** @} */
 
-
-
 ACLONE *argeater_clone_args(ACLONE *clones, int argc, const char **argv);
+ACLONE *argeater_clone_word_list(ACLONE *clones, int clone_count, WORD_LIST* wlist);
 
 bool argeater_process(ACLONE *clones, AE_MAP *map);
 void argeater_show_usage(AE_MAP *map, const char *cmd_name);
