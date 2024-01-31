@@ -4,6 +4,7 @@
 #include <stdlib.h>    // for exit()
 #include <alloca.h>
 #include <assert.h>
+#include <errno.h>
 
 #include "argeater.h"
 #include "export.h"
