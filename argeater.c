@@ -207,6 +207,26 @@ bool argeater_string_setter(const char **target, const char *value)
    return true;
 }
 
+bool argeater_int_setter(const char **target, const char *value)
+{
+   char *end;
+   errno = 0;
+   long lval = strtol(value, &end, 10);
+   if (errno)
+   {
+      printf("Error interpreting '%s' as an integer: %s.\n", value, strerror(errno));
+      return false;
+   }
+   if (end == value)
+   {
+      printf("Failed to interpret '%s' as an integer.\n", value);
+      return false;
+   }
+
+   *(int*)target = (int)lval;
+   return true;
+}
+
 void argeater_set_missing_actions(AE_MAP *map)
 {
    AE_ITEM *ptr = map->items;
