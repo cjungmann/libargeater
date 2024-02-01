@@ -202,13 +202,13 @@ bool argeater_item_from_name(AE_ITEM **item,
    exit(1);
 }
 
-bool argeater_string_setter(const char **target, const char *value)
+EXPORT bool argeater_string_setter(const char **target, const char *value)
 {
    *target = value;
    return true;
 }
 
-bool argeater_int_setter(const char **target, const char *value)
+EXPORT bool argeater_int_setter(const char **target, const char *value)
 {
    char *end;
    errno = 0;
