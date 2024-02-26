@@ -245,7 +245,9 @@ EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
 {
    bool success = true;
    bool reading_options = true;
-   AE_ITEM *last_position_item = NULL;
+   AE_ITEM *next_position_item = NULL;
+
+   find_next_position_item(&next_position_item, map);
 
    argeater_set_missing_actions(map);
 
@@ -280,8 +282,12 @@ EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
             arg_char = &str[1];
       }
       // Assign to next position arg
-      else if (find_next_position_item(&last_position_item, map))
-         *(last_position_item->target) = str;
+      else if (next_position_item)
+      {
+         success = set_item_value_or_die(next_position_item, str);
+         find_next_position_item(&next_position_item, map);
+      }
+         // *(last_position_item->target) = str;
 
       if (arg_name)
       {
