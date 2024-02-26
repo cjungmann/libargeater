@@ -43,6 +43,17 @@ struct word_list {
 };
 #endif
 
+EXPORT int argeater_count_word_list(WORD_LIST *wlist)
+{
+   int count = 0;
+   while (wlist)
+   {
+      ++count;
+      wlist = wlist->next;
+   }
+   return count;
+}
+
 EXPORT ACLONE *argeater_clone_word_list(ACLONE *clones, int clone_count, WORD_LIST* wl)
 {
    ACLONE *ptr = clones;
