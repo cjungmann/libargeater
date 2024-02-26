@@ -65,6 +65,8 @@ AE_ITEM *argeater_search_name(AE_MAP *map, const char *name);
 
 ACLONE *argeater_clone_args(ACLONE *clones, int argc, const char **argv);
 ACLONE *argeater_clone_word_list(ACLONE *clones, int clone_count, WORD_LIST* wlist);
+int argeater_count_word_list(WORD_LIST *wlist);
+
 
 bool argeater_process(ACLONE *clones, AE_MAP *map);
 void argeater_show_usage(AE_MAP *map, const char *cmd_name);
@@ -84,5 +86,10 @@ bool argeater_int_setter(const char **target, const char *value);
       (ARGC),\
       (ARGV)))
 
+#define CLONES_FROM_LIST_FINAL(wl,c)            \
+   argeater_clone_word_list(                    \
+      (alloca((c)*sizeof(ACLONE))), (c), (wl))
+
+#define CLONE_WORD_LIST(wl) CLONES_FROM_LIST_FINAL((wl), argeater_count_word_list((wl))+1)
 
 #endif
