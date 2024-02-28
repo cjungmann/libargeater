@@ -243,6 +243,9 @@ void argeater_set_missing_actions(AE_MAP *map)
 
 EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
 {
+   if (args == NULL)
+      return true;
+
    bool success = true;
    bool reading_options = true;
    AE_ITEM *next_position_item = NULL;
