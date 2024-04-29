@@ -76,8 +76,10 @@ void argeater_show_arguments(AE_MAP *map, int indent);
 void argeater_dump_actions(AE_MAP *map);
 
 bool argeater_string_setter(const char **target, const char *value);
+bool argeater_bool_setter(const char **target, const char *value);
 bool argeater_int_setter(const char **target, const char *value);
-
+bool argeater_ro_stream_setter(const char **target, const char *value);
+bool argeater_ro_file_setter(const char **target, const char *value);
 
 #define INIT_MAP(X) { (X), sizeof((X)) / sizeof((X)[0]) }
 #define CLONE_ARGS(ARGC,ARGV)\
