@@ -63,7 +63,7 @@ EXPORT ACLONE *argeater_clone_word_list(ACLONE *clones, int clone_count, WORD_LI
    // as a handle to access the first unused argument
    ACLONE *tmp = ptr++;
    tmp->val = "fake_app";
-   tmp->next = ptr;
+   tmp->next = (ptr < end) ? ptr : NULL;
 
    while (ptr < end && wl!=NULL)
    {
