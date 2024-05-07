@@ -1,0 +1,36 @@
+.so fork.tmac
+.SS ERROR SINKS
+.PP
+This library reports argument-processing errors to an
+.B error sink
+that is reponsible for delivering the error message to its
+intended target.
+.PP
+The default error sink writes the message to
+.BR stderr ,
+but the target can be easily changed to suit different needs.
+.PP
+Use library function
+.B argeater_set_error_sink
+to change the error sink.
+.IP
+.p_set_error_sink
+.PP
+There are three builtin error sink functions that can be passed
+to the
+.B argeater_set_error_sink
+function:
+.IP
+.p_aesink_to_stderr
+.p_aesink_to_stdout
+.p_aesink_to_null
+.PP
+Notice that the error sink functions match the data type of the
+standard function
+.BR vprintf ,
+which could itself be used to write error messages to
+.BR stdout .
+.TP
+.B Custom Error Sinks
+This feature was added to support saving the error message to a
+string variable for Bash builtin programs.
