@@ -14,6 +14,8 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include <stdarg.h>
+
 // from *action_setter* example
 #include <stdlib.h>  // for strtol
 
@@ -22,9 +24,24 @@ const char *help_flag = NULL;
 const char *filename = NULL;
 const char *verbose_flag = NULL;
 const char *favcolor = NULL;
+static int ival = 0;
 
 // from *action_setter* example
 int debug_level = 0;
+
+// Replacement error sink function
+int red_printf(const char *format, ...)
+{
+   int rval = 0;
+   va_list args;
+   va_start(args, format);
+   printf("\x1b[31;1m");
+   rval = vprintf(format, args);
+   printf("\x1b[m");
+   fflush(stdout);
+   va_end(args);
+   return rval;
+}
 
 // from *action_setter_example
 // Implement the handler function.
@@ -51,6 +68,10 @@ AE_ITEM actions[] = {
    { &filename,     "filename", '\0', AET_ARGUMENT },
    { &verbose_flag, "verbose",  'v',  AET_FLAG_OPTION },
    { &favcolor,     "favcolor", 'c',  AET_VALUE_OPTION },
+
+   // Validate utility of argeater_set_error_sink/red_printf:
+   { (const char **)&ival, "intval", 'i', AET_VALUE_OPTION,
+     "Enter an integer value", NULL, argeater_int_setter },
 
    // from *action_setter* example:
    { (const char**)&debug_level,
@@ -80,6 +101,8 @@ int main(int argc, const char **argv)
       show_help(&action_map, *argv);
       return 1;
    }
+
+   argeater_set_error_sink(red_printf);
 
    // Collect arguments into a linked list:
    ACLONE *clones = CLONE_ARGS(argc, argv);
