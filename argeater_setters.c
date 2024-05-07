@@ -6,6 +6,11 @@
 #include <stdlib.h>   // strtol()
 #include "export.h"
 
+#include "argeater.h"
+
+// Found in `error_sinks.c`
+extern argeater_error_sink AE_ESINK;
+
 EXPORT bool argeater_string_setter(const char **target, const char *value)
 {
    *target = value;
@@ -25,12 +30,12 @@ EXPORT bool argeater_int_setter(const char **target, const char *value)
    long lval = strtol(value, &end, 10);
    if (errno)
    {
-      printf("Error interpreting '%s' as an integer: %s.\n", value, strerror(errno));
+      (*AE_ESINK)("Error interpreting '%s' as an integer: %s.\n", value, strerror(errno));
       return false;
    }
    if (end == value)
    {
-      printf("Failed to interpret '%s' as an integer.\n", value);
+      (*AE_ESINK)("Failed to interpret '%s' as an integer.\n", value);
       return false;
    }
 
@@ -47,7 +52,7 @@ EXPORT bool argeater_ro_stream_setter(const char **target, const char *value)
       return true;
    }
    else
-      printf("Failed to open '%s': %s.\n", value, strerror(errno));
+      (*AE_ESINK)("Failed to open '%s': %s.\n", value, strerror(errno));
 
    return false;
 }
@@ -61,7 +66,7 @@ EXPORT bool argeater_ro_file_setter(const char **target, const char *value)
       return true;
    }
    else
-      printf("Failed to open '%s': %s.\n", value, strerror(errno));
+      (*AE_ESINK)("Failed to open '%s': %s.\n", value, strerror(errno));
 
    return false;
 }

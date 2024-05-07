@@ -9,6 +9,9 @@
 #include "argeater.h"
 #include "export.h"
 
+// Found in `error_sinks.c`
+extern argeater_error_sink AE_ESINK;
+
 /**
  * @brief Compare member @ref chr to match a AE_MAP.
  * @param "map"    Action map to search
@@ -52,9 +55,9 @@ int set_item_value_or_die(AE_ITEM *item, const char *value)
    if (value == NULL || *value == '\0')
    {
       if (item->chr)
-         fprintf(stderr, "Option '-%c' needs a value.\n", item->chr);
+         (*AE_ESINK)("Option '-%c' needs a value.\n", item->chr);
       else if (item->name)
-         fprintf(stderr, "Option '-%s' needs a value.\n", item->name);
+         (*AE_ESINK)("Option '-%s' needs a value.\n", item->name);
 
       return 1;
    }
@@ -180,7 +183,7 @@ bool argeater_item_from_name(AE_ITEM **item,
             return true;
          }
          else
-            fprintf(stderr, "Option '--%s' must take a value.\n", option_name);
+            (*AE_ESINK)("Option '--%s' must take a value.\n", option_name);
       }
       else if (AE_IS_FLAG_OPTION(found_item))
       {
@@ -191,13 +194,13 @@ bool argeater_item_from_name(AE_ITEM **item,
             return true;
          }
          else
-            fprintf(stderr, "Option '--%s' does not take a value.\n", option_name);
+            (*AE_ESINK)("Option '--%s' does not take a value.\n", option_name);
       }
       else
-         fprintf(stderr, "Unrecognized option '--%s'\n", option_name);
+         (*AE_ESINK)("Unrecognized option '--%s'\n", option_name);
    }
    else
-      fprintf(stderr, "Unrecognized option  '--%s'\n", option_name);
+      (*AE_ESINK)("Unrecognized option  '--%s'\n", option_name);
 
    exit(1);
 }
@@ -303,7 +306,7 @@ EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
             }
             else
             {
-               fprintf(stderr, "Unrecognized option '-%c'\n", *arg_char);
+               (*AE_ESINK)("Unrecognized option '-%c'\n", *arg_char);
                exit(1);
             }
 

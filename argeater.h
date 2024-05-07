@@ -24,6 +24,7 @@ typedef enum action_type {
 } AE_TYPE;
 
 typedef bool (*action_setter)(const char **target, const char *value);
+typedef int (*ae_error_sink)(const char *format, ...);
 
 #define AET_ARGUMENT     (0)
 #define AET_FLAG_OPTION  (AET_OPTION)
@@ -52,6 +53,7 @@ struct action_map {
    int count;
 };
 
+
 /**
  * @defgroup InternalFunctions Internal Funtions
  * @{
@@ -61,6 +63,18 @@ int set_item_flag(AE_ITEM *item);
 
 AE_ITEM *argeater_search_char(AE_MAP *map, char chr);
 AE_ITEM *argeater_search_name(AE_MAP *map, const char *name);
+/** @} */
+
+// implemented in `error_sinks.c`:
+/**
+ * @defgroup Error Sink functions
+ * implemented in @file error_sinks.c
+ * @{
+ */
+int aesink_to_stderr(const char *format, ...);
+int aesink_to_stdout(const char *format, ...);
+int aesink_to_null(const char *format, ...);
+ae_error_sink argeater_set_error_sink(ae_error_sink replacement);
 /** @} */
 
 ACLONE *argeater_clone_args(ACLONE *clones, int argc, const char **argv);
