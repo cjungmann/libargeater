@@ -60,7 +60,7 @@ test:
 $(TEST_TARGETS) : $(TEST_SOURCES)
 	$(CC) $(CFLAGS) -o $@ test_$@.c $(TARGET_STATIC)
 
-For shared library targets:
+# For shared library targets:
 install:
 	mkdir --mode=775 -p $(MAN_PATH)
 	install -D --mode=644 $(HEADERS) $(PREFIX)/include
