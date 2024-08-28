@@ -9,7 +9,7 @@
 #include "argeater.h"
 
 // Found in `error_sinks.c`
-extern argeater_error_sink AE_ESINK;
+extern ae_error_sink AE_ESINK;
 
 EXPORT bool argeater_string_setter(const char **target, const char *value)
 {

@@ -10,7 +10,7 @@
 #include "export.h"
 
 // Found in `error_sinks.c`
-extern argeater_error_sink AE_ESINK;
+extern ae_error_sink AE_ESINK;
 
 /**
  * @brief Compare member @ref chr to match a AE_MAP.
