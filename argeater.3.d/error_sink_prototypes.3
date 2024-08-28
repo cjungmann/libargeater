@@ -1,0 +1,29 @@
+.de p_error_sink
+.   cdef_start typedef\ int (*ae_error_sink)
+.   cdef_arg "const\ char\ *" format
+.   cdef_arg ...
+.   cdef_end
+..
+.de p_aesink_to_stderr
+.   cdef_start int aesink_to_stderr
+.   cdef_arg "const\ char\ *" format
+.   cdef_arg ...
+.   cdef_end
+..
+.de p_aesink_to_stdout
+.   cdef_start int aesink_to_stdout
+.   cdef_arg "const\ char\ *" format
+.   cdef_arg ...
+.   cdef_end
+..
+.de p_aesink_to_null
+.   cdef_start int aesink_to_null
+.   cdef_arg "const\ char\ *" format
+.   cdef_arg ...
+.   cdef_end
+..
+.de p_set_error_sink
+.   cdef_start ae_error_sink argeater_set_error_sink
+.   cdef_arg ae_error_sink replacement
+.   cdef_end
+..
