@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include "argeater.h"
-
+#include "export.h"
 
 int aesink_to_stderr(const char *format, ...)
 {
@@ -38,7 +38,7 @@ int aesink_to_null(const char *format, ...)
 ae_error_sink AE_ESINK = aesink_to_stderr;
 
 
-ae_error_sink argeater_set_error_sink(ae_error_sink replacement)
+EXPORT ae_error_sink argeater_set_error_sink(ae_error_sink replacement)
 {
    ae_error_sink cur = AE_ESINK;
    AE_ESINK = replacement;
