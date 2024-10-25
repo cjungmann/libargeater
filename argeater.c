@@ -57,9 +57,9 @@ int set_item_value_or_die(AE_ITEM *item, const char *value)
       if (item->chr)
          (*AE_ESINK)("Option '-%c' needs a value.\n", item->chr);
       else if (item->name)
-         (*AE_ESINK)("Option '-%s' needs a value.\n", item->name);
+         (*AE_ESINK)("Option '--%s' needs a value.\n", item->name);
 
-      return 1;
+      return 0;
    }
 
    return (*item->setter)(item->target, value);
