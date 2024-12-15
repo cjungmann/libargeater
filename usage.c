@@ -36,7 +36,7 @@ void print_action_content(AE_ITEM *item)
       }
    }
 
-   printf(val);
+   printf("%s", val);
 }
 
 void show_action(AE_ITEM *item, int indent)
