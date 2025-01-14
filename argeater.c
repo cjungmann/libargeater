@@ -52,12 +52,17 @@ AE_ITEM *argeater_search_name(AE_MAP *map, const char *name)
 
 int set_item_value_or_die(AE_ITEM *item, const char *value)
 {
-   if (value == NULL || *value == '\0')
+   if (value == NULL)
    {
       if (item->chr)
          (*AE_ESINK)("Option '-%c' needs a value.\n", item->chr);
       else if (item->name)
-         (*AE_ESINK)("Option '--%s' needs a value.\n", item->name);
+      {
+         if (item->type == AET_ARGUMENT)
+            (*AE_ESINK)("Argument '%s' needs a value.\n", item->name);
+         else
+            (*AE_ESINK)("Option '--%s' needs a value.\n", item->name);
+      }
 
       return 0;
    }
@@ -307,7 +312,8 @@ EXPORT bool argeater_process(ACLONE *args, AE_MAP *map)
             else
             {
                (*AE_ESINK)("Unrecognized option '-%c'\n", *arg_char);
-               exit(1);
+               success = false;
+               break;
             }
 
             ++arg_char;
