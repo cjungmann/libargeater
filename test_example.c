@@ -2,19 +2,28 @@
 #include <alloca.h>
 #include <stddef.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 // declare variables for the action map:
 const char *help_flag = NULL;
 const char *filename = NULL;
 const char *verbose_flag = NULL;
 const char *favcolor = NULL;
+bool silent = 0;
 
 // attach variables to actions:
 AE_ITEM actions[] = {
    { &help_flag,    "help",     'h',  AET_FLAG_OPTION },
    { &filename,     "filename", '\0', AET_ARGUMENT },
    { &verbose_flag, "verbose",  'v',  AET_FLAG_OPTION },
-   { &favcolor,     "favcolor", 'c',  AET_VALUE_OPTION }
+   { &favcolor,     "favcolor", 'c',  AET_VALUE_OPTION },
+
+   // This is a special case.  Using argeater_bool_setter
+   // requires the AET_FLAG_OPTION flag to activate the setter.
+   // However, the value argument of the setter is ignored by
+   // argeater_bool_setter
+   { (const char **)&silent, "silent", 's', AET_FLAG_OPTION,
+     NULL, NULL, argeater_bool_setter }
 };
 
 // Use macro to intializa a AE_MAP instance:
@@ -44,8 +53,9 @@ int main(int argc, const char **argv)
          show_help(&action_map, *argv);
          return 1;
       }
-      // else
-      //   return run_program_reading_global_vars();
+
+      argeater_dump_actions(&action_map);
+      printf("silent is '%d'\n", silent);
    }
    else
    {
