@@ -23,3 +23,57 @@ it is about to be used, but using a
 function can not only save the argument value in its native form but
 also validate the argument value before continuing.
 
+.SS BUILTIN ACTION_SETTERS
+.PP
+The library provides several simple action setters for the convenience
+of developers.  They are:
+.TP
+.p_argeater_string_setter
+.RS
+.PP
+This is the default setter.  It will be used if no specific setter
+is provided to the
+.BR INIT_MAP .
+.RE
+.TP
+.p_argeater_int_setter
+.RS
+.PP
+This will set an integer variable to the value specified on the
+command line.
+.RE
+.TP
+.p_argeater_bool_setter
+.RS
+.PP
+This will set an integer value to 1.
+It is assumed that unset options are false by default, with a
+0 value.
+The
+.B value
+argument will be ignored.
+.PP
+Note that this is different from using the
+.BR AET_FLAG_OPTION ,
+which expects no setter argument and automatically sets the
+target
+.B const char *
+variable to the string value
+.RB " on ".
+.PP
+The following is an example of how the
+.B argeater_bool_setter
+should be used:
+
+.RS 4
+.EX
+bool silent_flag = 0;
+
+AE_ITEM actions[] = {
+      { (const char **)&silent, "silent", 's', AET_FLAG_OPTION,
+        NULL, NULL, argeater_bool_setter }
+   };
+.EE
+.RE
+.RE
+

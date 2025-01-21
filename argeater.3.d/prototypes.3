@@ -88,22 +88,29 @@
 .\"
 .de p_action_setter
 .   cdef_start "typedef\ bool" (*action_setter)
-.   cdef_arg "const\ char\ **" target
-.   cdef_arg "const\ char\ *" value
+.   cdef_arg "const\ char **" target
+.   cdef_arg "const\ char *" value
 .   cdef_end
 ..
 .\"
 .de p_argeater_string_setter
 .   cdef_start bool argeater_string_setter
-.   cdef_arg "const\ char\ **" target
-.   cdef_arg "const\ char\ *" value
+.   cdef_arg "const\ char **" target
+.   cdef_arg "const\ char *" value
 .   cdef_end
 ..
 .\"
 .de p_argeater_int_setter
 .   cdef_start bool argeater_int_setter
-.   cdef_arg "const\ char\ **" target
-.   cdef_arg "const\ char\ *" value
+.   cdef_arg "const\ char **" target
+.   cdef_arg "const\ char *" value
+.   cdef_end
+..
+.\"
+.de p_argeater_bool_setter
+.   cdef_start bool argeater_bool_setter
+.   cdef_arg "const\ char **" target
+.   cdef_arg "const\ char *" value
 .   cdef_end
 ..
 .\"
