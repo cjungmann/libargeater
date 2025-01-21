@@ -173,19 +173,21 @@ EXPORT void argeater_dump_actions(AE_MAP *map)
 
    for (AE_ITEM *ptr = map->items; ptr < end; ++ptr)
    {
-      const char *str = NULL;
-      if (ptr->setter == argeater_string_setter)
-         str = *ptr->target;
-      else
-         str = "N/A for custom setter";
-
-      if (str == NULL)
-         str = "NULL";
-
       const char *name = ptr->name;
       if (name == NULL)
          name = UNNAMED;
 
-      printf("%-*s: '%s'\n", max_name_len, name, str);
+      if (ptr->setter == argeater_string_setter)
+         printf("%-*s: '%s'\n", max_name_len, name, *ptr->target);
+      else if (ptr->setter == argeater_bool_setter
+         || ptr->setter == argeater_int_setter)
+      {
+         int val = *(int*)ptr->target;
+         if (val==100)
+            val = 0;
+         // printf("%-*s: '%d'\n", max_name_len, name, *(int*)*ptr->target);
+      }
+      else
+         printf("%-*s: N/A for custom setter\n", max_name_len, name);
    }
 }
