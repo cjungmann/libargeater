@@ -3,7 +3,7 @@
 #include "argeater.h"
 #include "export.h"
 
-int aesink_to_stderr(const char *format, ...)
+EXPORT int aesink_to_stderr(const char *format, ...)
 {
    int rval = 0;
    va_list args;
@@ -16,7 +16,7 @@ int aesink_to_stderr(const char *format, ...)
    return rval;
 }
 
-int aesink_to_stdout(const char *format, ...)
+EXPORT int aesink_to_stdout(const char *format, ...)
 {
    int rval = 0;
    va_list args;
@@ -29,7 +29,7 @@ int aesink_to_stdout(const char *format, ...)
    return rval;
 }
 
-int aesink_to_null(const char *format, ...)
+EXPORT int aesink_to_null(const char *format, ...)
 {
    return 0;
 }
