@@ -19,7 +19,7 @@ EXPORT bool argeater_string_setter(const char **target, const char *value)
 
 EXPORT bool argeater_bool_setter(const char **target, const char *value)
 {
-   *(bool*)target = strcmp(value, "on")==0;
+   *(bool*)target = 1;
    return true;
 }
 
