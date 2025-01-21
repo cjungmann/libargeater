@@ -21,19 +21,24 @@ cc -o example test_example.c libargeater.a
 \(shinclude <alloca.h>
 \(shinclude <stddef.h>
 \(shinclude <stdio.h>
+\(shinclude <stdbool.h>
 
 \fB// declare variables for the action map:\fP
 const char *help_flag = NULL;
 const char *filename = NULL;
 const char *verbose_flag = NULL;
 const char *favcolor = NULL;
+bool silent = 0;
+
 
 \fB// attach variables to actions:\fP
 AE_ITEM actions[] = {
   { &help_flag,    \(dqhelp\(dq,     \(aqh\(aq,  AET_FLAG_OPTION },
   { &filename,     \(dqfilename\(dq, \(aq\(rs0\(aq, AET_ARGUMENT },
   { &verbose_flag, \(dqverbose\(dq,  \(aqv\(aq,  AET_FLAG_OPTION },
-  { &favcolor,     \(dqfavcolor\(dq, \(aqc\(aq,  AET_VALUE_OPTION }
+  { &favcolor,     \(dqfavcolor\(dq, \(aqc\(aq,  AET_VALUE_OPTION },
+  { (const char**)&silent, \(dqsilent\(dq, \(aqs\(aq, AET_FLAG_OPTION,
+    NULL, NULL, argeater_bool_setter }
 };
 
 \fB// Use macro to intializa a AE_MAP instance:\fP
