@@ -8,19 +8,27 @@ This document is a companion for
 .BR argeater (3)
 that can be used as a quick reference by a developer who is familiar
 with the library.
-.SH EXAMPLES
-.SS AE_ITEM
 .PP
-The
+It is particularly targeted for developers using the
+.B basic_handle
+template of the
+.B bash_builtin
+repository (see
+.B REFERENCES
+below).
+.SH EXAMPLE
+.PP
+This section is a reference and source for quick copies of working
+code defining arguments destined to be used by
+.BR argeater_process .
+.PP
+It primarily shows an
 .B AE_ITEM
-struct defines an argument.  An array of
-.BR AE_ITEM s
-is used to initialize an
-.BR AE_MAP .
-The following example shows a variety of argument types, using default
-setters from the
-.B argeater
-library, along with some examples from the bash_builtin handle template.
+array of a variety of exemplary argument descriptions, followed by the
+code using this array to create and use an
+.B AE_MAP
+with the function
+.BR argeater_process .
 .PP
 .RS 4
 .EX
@@ -29,12 +37,12 @@ static \fBconst char *\fP\fIfile_name\fP;
 static \fBbool\fP \fIflag_strict\fP;
 static \fBint\fP \fIint_value\fP;
 
-// \fBbasic_handle\fP types from \fBbash_builtin\fP (see below):
+// Special types variables (see \fBBASIC_HANDLE SETTERS\fP below):
 static \fBSHELL_VAR\fP \fIreturn_value\fP;
 static \fBconst char *\fP\fIcallback_function_name\fP;
 
 AE_ITEM my_actions[] = {
-   {&\fIgeneric_string\fP, \(dqfilename\(dq, \(aqf\(aq, AET_ARGUMENT},
+   {&\fIgeneric_string\fP, \(dqgeneric_string\(dq, \(aq\(rs0\(aq, AET_ARGUMENT},
 
    {&\fIfile_name\fP, \(dqfilename\(dq, \(aqf\(aq, AET_VALUE_OPTION,
     \(dqfile to read\(dq, \(dqFILE\(dq, argeater_string_setter},
@@ -45,7 +53,7 @@ AE_ITEM my_actions[] = {
    {(const char**)&\fIint_value\fP, \(dqint\(dq, \(aqi\(aq, AET_VALUE_OPTION
     \(dquse strict interpretation\(dq, \(dqSTRICT\(dq, argeater_int_setter },
 
-   // \fBbasic_handle\fP types from \fBbash_builtin\fP (see below):
+   // Special types AE_ITEMs (see \fBBASIC_HANDLE SETTERS\fP below):
 
    {(const char**)&\fIreturn_value\fP, \(dqreturn\(dq, \(aqr\(aq, AET_VALUE_OPTION,
     \(dqvariable to hold return value\(dq, NULL, xxx_argeater_return_sv_setter},
@@ -58,6 +66,8 @@ AE_MAP my_map = INIT_MAP(my_actions);
 
 int my_action(SHELL_VAR *handle, ACLONE *args)
 {
+   int retval = EXECUTION_FAILURE;
+
    generic_string = NULL;
    file_name = NULL;
    flag_string = false;
@@ -68,13 +78,15 @@ int my_action(SHELL_VAR *handle, ACLONE *args)
    if (argeater_process(args, my_map))
    {
       // Use the argument variables
+
+      retval = EXECUTION_SUCCESS;
    }
 
-   return EXECUTION_SUCCESS;
+   return retval;
 }
 .RE
 
-.SH DEFINITIONS
+.SH BASIC_HANDLE SETTERS
 .PP
 The
 .B xxx
