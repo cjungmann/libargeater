@@ -1,0 +1,112 @@
+.TH argeater 7 2025-12-05
+.SH NAME
+.B argeater
+\- quick reference for developers
+.SH DESCRIPTION
+.PP
+This document is a companion for
+.BR argeater (3)
+that can be used as a quick reference by a developer who is familiar
+with the library.
+.SH EXAMPLES
+.SS AE_ITEM
+.PP
+The
+.B AE_ITEM
+struct defines an argument.  An array of
+.BR AE_ITEM s
+is used to initialize an
+.BR AE_MAP .
+The following example shows a variety of argument types, using default
+setters from the
+.B argeater
+library, along with some examples from the bash_builtin handle template.
+.PP
+.RS 4
+.EX
+static \fBconst char *\fP\fIgeneric_string\fP;
+static \fBconst char *\fP\fIfile_name\fP;
+static \fBbool\fP \fIflag_strict\fP;
+static \fBint\fP \fIint_value\fP;
+
+// \fBbasic_handle\fP types from \fBbash_builtin\fP (see below):
+static \fBSHELL_VAR\fP \fIreturn_value\fP;
+static \fBconst char *\fP\fIcallback_function_name\fP;
+
+AE_ITEM my_actions[] = {
+   {&\fIgeneric_string\fP, \(dqfilename\(dq, \(aqf\(aq, AET_ARGUMENT},
+
+   {&\fIfile_name\fP, \(dqfilename\(dq, \(aqf\(aq, AET_VALUE_OPTION,
+    \(dqfile to read\(dq, \(dqFILE\(dq, argeater_string_setter},
+
+   {(const char**)&\fIflag_strict\fP, \(dqstrict\(dq, \(aqs\(aq, AET_FLAG_OPTION,
+    \(dquse strict interpretation\(dq, \(dqSTRICT\(dq, argeater_bool_setter },
+
+   {(const char**)&\fIint_value\fP, \(dqint\(dq, \(aqi\(aq, AET_VALUE_OPTION
+    \(dquse strict interpretation\(dq, \(dqSTRICT\(dq, argeater_int_setter },
+
+   // \fBbasic_handle\fP types from \fBbash_builtin\fP (see below):
+
+   {(const char**)&\fIreturn_value\fP, \(dqreturn\(dq, \(aqr\(aq, AET_VALUE_OPTION,
+    \(dqvariable to hold return value\(dq, NULL, xxx_argeater_return_sv_setter},
+
+   {&\fIcallback_function_name\fP, \(dqcallback\(dq, \(aqc\(aq, AET_VALUE_OPTION,
+    \(dqcallback function\(dq, NULL, xxx_argeater_function_setter),
+};
+
+AE_MAP my_map = INIT_MAP(my_actions);
+
+int my_action(SHELL_VAR *handle, ACLONE *args)
+{
+   generic_string = NULL;
+   file_name = NULL;
+   flag_string = false;
+   int_value = 0;
+   return_value = NULL;
+   callback_function_name = NULL;
+
+   if (argeater_process(args, my_map))
+   {
+      // Use the argument variables
+   }
+
+   return EXECUTION_SUCCESS;
+}
+.RE
+
+.SH DEFINITIONS
+.PP
+The
+.B xxx
+in the setter names will be replaced with the project name when
+used with the
+.B basic_handle
+template in
+.BR bash_builtin .
+
+.TP
+.B xxx_argeater_return_sv_setter
+will set the target variable to a SHELL_VAR variable.  It will use an
+existing variable if found, otherwise it will create the named SHELL_VAR.
+It returns
+.B true
+upon success or
+.B false
+if the variable cannot be returned.
+.TP
+.B xxx_argeater_function_setter
+will set the target string variable to the function name
+.B only if
+the function variable is found and it is confirmed to be a script
+function.  Otherwise, the target string variable will be left alone.
+It returns
+.B true
+if the function is confirmed or
+.B false
+if it can't be found or if the name is not a function.
+
+.SH REFERENCES
+.TP
+.B Bash builtin repository:
+.UR https://github.com/cjungmann/bash_builtin.git
+.UE .
