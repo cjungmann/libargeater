@@ -5,8 +5,10 @@ TARGET_TEST = test
 
 PREFIX ?= /usr/local
 MAN_PATH = $(PREFIX)/share/man/man3
+MAN7_PATH = $(PREFIX)/share/man/man7
 
 MAN_PAGE = $(TARGET_ROOT).3
+MAN_PAGE7 = $(TARGET_ROOT).7
 
 # Change if source files not in base directory:
 SRC = .
@@ -67,6 +69,7 @@ install:
 	install -D --mode=775 $(TARGET_STATIC) $(PREFIX)/lib
 	install -D --mode=775 $(TARGET_SHARED) $(PREFIX)/lib
 	soelim $(MAN_PAGE) | gzip -c - > $(MAN_PATH)/$(MAN_PAGE).gz
+	soelim $(MAN_PAGE7) | gzip -c - > $(MAN7_PATH)/$(MAN_PAGE7).gz
 	ldconfig $(PREFIX)/lib
 
 # Remove the ones you don't need:
@@ -74,6 +77,7 @@ uninstall:
 	rm -f $(PREFIX)/lib/$(TARGET)
 	rm -f $(PREFIX)/include/$(HEADERS)
 	rm -f $(MAN_PATH)/$(MAN_PAGE).gz
+	rm -f $(MAN7_PATH)/$(MAN_PAGE7).gz
 	ldconfig $(PREFIX)/lib
 
 clean:
