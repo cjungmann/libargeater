@@ -1,27 +1,67 @@
 .so fork.tmac
 .SS MAKING ACLONE LISTS
 .PP
-Make the needed
+.B Argeaters
+reads function arguments from an
 .B ACLONE
-list from the standard arguments of function
-.BR main .
+list object.
+.SS ACLONE DEFINITION
 .PP
-In both of these functions, the calling function should allocate
-an array of
+An
 .B ACLONE
-elements.
-During initialization, the elements of the array will also be
-connected as a linked list from which elements can be discarded as
-they are consumed, and the memory of the discarded elements will be
-reclaimed when the array freed or gone out of scope (when using
-.B alloca
-for the array).
+(arguments clone)
+list object is a
+.I single block of memory
+containing a single-linked list of pointers to the strings
+of an argument list.  As argument items are consumed (eaten),
+they are unlinked from the list.  When argument processing is
+complete, the orphaned items will be freed when the memory block
+is freed.
+.PP
+To avoid the need to explicitly free the memory, the examples and
+macros use
+.I stack memory
+allocated with
+.BR alloca .
+Having said that, there is no reason not to use
+.BR malloc " and " free
+for the same purposes.
+.SS THE ACLONE ANCHOR
+.PP
+To permit consuming the first argument of an
+.B ACLONE
+list, an
+.I anchor item
+must preceed it.  When processing an argument
+list from the command line, the command name serves as the anchor
+item.
+For argument lists that do not include the command or function name
+at the beginning, an dummy anchor must be configured to allow
+access to the first consumable argument.
+The
+.B WORD_LIST
+of arguments of a Bash function is a situation where a dummy
+.B ACLONE
+item is needed.
 .\"
+.SS MAKING ACLONE LISTS
 .PP
-.B Make ACLONE Array from Main Args
-.RS 4
+As explained about, the
+.B ACLONE
+list must be made from a single block of memory: getting a
+count and allocating sufficient memory is a prerequisite to
+initializing the
+.B ACLONE
+list.
+.SS INITIALIZATION FUNCTIONS
+.PP
+There are initailization functions for function
+.B main
+and for
+.BR WORD_LIST .
 .PP
 .p_argeater_clone_args
+.RS 4
 .TP
 .I clones
 An uninitialized array of
@@ -38,32 +78,11 @@ It should correspond to the first argument of
 .I argv
 the second argument of
 .BR main .
-.PP
-.B EXAMPLE:
-.EX
-int main(int argc, const char **argv)
-{
-   ACLONE *clones = (ACLONES*)alloca(argc * sizeof(ACLONE);
-   ACLONE *ptr = argeater_clone_args(clones, argc, argv);
-
-   if (argeater_process(clones, map))
-      do_your_program();
-
-   return 0;
-}
-.EE
 .RE
 .\"
 .PP
-.B Make ACLONE Array from WORD_LIST
-.RS 4
-.PP
-This library was created while developing a Bash builtin function,
-whose arguments come in the form of a
-.B WORD_LIST
-linked list.
-.PP
 .p_argeater_clone_word_list
+.RS 4
 .TP
 .I clones
 an uninitialized array of
@@ -74,28 +93,78 @@ elements to be initialized.
 the number of elements in the
 .I clones
 array.
-This value must be counted from the
+This value must be
+.B one more than
+the number of words in the
 .BR WORD_LIST .
 .TP
 .I wlist
 should be the word list passed to the builtin function.
+.RE
+.SS INITIALIZATION MACROS
 .PP
-.B EXAMPLE
+There are also two macros provided to simplify initialization:
+.PP
+.B CLONE_ARGS \c
+.RI ( ACLONE_ARRAY ", " ARGC ", " ARGV )
+.br
+.B CLONE_WORD_LIST \c
+.RI ( WORD_LIST )
+.PP
+Both macros use
+.B alloca
+because they can't ensure the
+.B free
+would be called after using
+.BR malloc .
+.SS EXAMPLES
+.PP
+.B main() function example (using malloc and free):
+.RS 4
+.PP
+.EX
+int main(int argc, const char **argv)
+{
+   ACLONE *clones = (ACLONES*)malloc(argc * sizeof(ACLONE);
+   ACLONE *ptr = \fBargeater_clone_args\fP(clones, argc, argv);
+
+   if (argeater_process(clones, &map))
+      do_your_program();
+
+   free(clones);
+
+   return 0;
+}
+.EE
+.RE
+.PP
+.B WORD_LIST function example (using alloca):
+.RS 4
+.PP
 .EX
 static int cmd_builtin(WORD_LIST *list)
 {
-   int elcount = 0;
-   WORD_LIST *ptr = list;
-   while (ptr)
-   {
-      ++elcount;
-      ptr = ptr->next;
-   }
+   int elcount = 1 + \fBargeater_count_word_list\fP(list);
 
    ACLONE *clones = (ACLONES*)alloca(elcount * sizeof(ACLONE));
-   ACLONE *ptr = argeater_clone_word_list(clones, elcount, list);
+   ACLONE *ptr = \fBargeater_clone_word_list\fP(clones, elcount, list);
 
-   if (argeater_process(clones, map))
+   if (argeater_process(clones, &map))
+      do_your_program();
+
+   return 0;
+}
+.EE
+.RE
+.PP
+.B WORD_LIST function example using macro:
+.RS 4
+.PP
+.EX
+static int cmd_builtin(WORD_LIST *list)
+{
+   ACLONES *clones = \fBCLONE_WORD_LIST\fP(list);
+   if (argeater_process(clones, &map))
       do_your_program();
 
    return 0;
