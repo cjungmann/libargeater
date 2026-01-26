@@ -79,12 +79,65 @@ int my_action(SHELL_VAR *handle, ACLONE *args)
    {
       // Use the argument variables
 
+      // Setting return value is not trivial, start with this
+      if (return_value)
+      {
+         dispose_variable_value(return_value); // generic types
+         // consult variables.h, variables.c in bash source
+         // code for setting the new value and attributes
+      }
+
       retval = EXECUTION_SUCCESS;
    }
 
    return retval;
 }
 .RE
+
+.SH SETTING RETURN VALUES
+.PP
+Return values are Bash SHELL_VAR variables that need special
+handling.  There are several steps:
+.PP
+Refer to Bash source files
+.BR variables.h " and " variables.c .
+In particular, inline (private) functions
+.BR set_int_value " and " set_string_value
+in
+.B variables.c
+are helpful examples of setting a Bash SHELL_VAR
+variable.
+.TS
+tab(|);
+l lx.
+1|T{
+Dispose of the existing value.
+.br
+.sp
+You can use
+.BR dispose_variable_value ,
+found in
+.BR variables.c ,
+for generic Bash variables, but be prepared to
+create your own disposal code for complicated custom
+SHELL_VAR types.
+T}
+
+2|T{
+Allocate memory (except for integer types) and assign the
+new value to it.
+T}
+
+3|T{
+Assign the pointer to the memory to the
+.B value
+member of the SHELL_VAR.
+T}
+
+4|Set the SHELL_VAR variable attributes.
+.TE
+
+
 
 .SH BASIC_HANDLE SETTERS
 .PP
