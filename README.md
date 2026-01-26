@@ -21,8 +21,8 @@ The following commands will clone the project, then build the library
 and a few test programs.
 
 ~~~sh
-clone https://github.com/cjungmann/argeater.git
-cd argeater
+clone https://github.com/cjungmann/libargeater.git
+cd libargeater
 make
 ~~~
 
